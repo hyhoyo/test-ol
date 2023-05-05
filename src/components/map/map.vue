@@ -13,6 +13,7 @@ import VectorTileLayer from 'ol/layer/VectorTile.js';
 import VectorTile from 'ol/source/VectorTile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
+import { mapDefaultConfig } from './config.js';
 export default {
   name: 'UcenOlMap',
   props: {
@@ -30,7 +31,7 @@ export default {
   data() {
     return {
       map: undefined,
-      mapConf: cloneDeep(window.mapDefaultConfig)
+      mapConf: cloneDeep(mapDefaultConfig)
     };
   },
   watch: {
