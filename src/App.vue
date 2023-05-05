@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <ucen-ol-map></ucen-ol-map>
     <router-view />
   </div>
 </template>

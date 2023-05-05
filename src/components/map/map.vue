@@ -2,7 +2,7 @@
   <div class="map-container" :id="id"></div>
 </template>
 <script>
-import { getUuid } from '@/utils';
+import { getUuid } from '../../utils/index.js';
 import { Map, View } from 'ol';
 import XYZ from 'ol/source/XYZ';
 import TileLayer from 'ol/layer/Tile';

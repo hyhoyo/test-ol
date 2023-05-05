@@ -1,3 +1,3 @@
-import * as UcenOlMap from './map';
+import Map from './map';
 
-export { UcenOlMap };
+export { Map };
