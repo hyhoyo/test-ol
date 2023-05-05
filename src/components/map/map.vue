@@ -39,6 +39,9 @@ export default {
       handler(newVal) {
         if (newVal) {
           this.mapConf = Object.assign(this.mapConfig, this.mapConf);
+          if (document.getElementById(this.id)) {
+            this.initMap();
+          }
         }
       },
       deep: true
