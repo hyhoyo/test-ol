@@ -3,8 +3,11 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './styles/olStyle.css';
+import UcenMap from './index';
 
 Vue.config.productionTip = false;
+
+Vue.use(UcenMap);
 
 new Vue({
   router,

@@ -1,12 +1,12 @@
-import { Map } from './components';
+import { UcenOlMap } from './components';
 
 export default function install(Vue, options = {}) {
-  if (install.install) {
+  if (install.installed) {
     return;
   }
-  install.install = true;
+  install.installed = true;
 
-  Vue.use(Map, options);
+  Vue.use(UcenOlMap, options);
 }
 
-export { install, Map };
+export { install, UcenOlMap };

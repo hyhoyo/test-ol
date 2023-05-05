@@ -3,7 +3,14 @@
     <router-view />
   </div>
 </template>
-
+<script>
+export default {
+  name: 'UUU',
+  components: {
+    // UcenOlMap
+  }
+};
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
