@@ -1,6 +1,6 @@
 {
-  "name": "test-he-ol-map",
-  "version": "0.1.0",
+  "name": "test-he-ol-map-1",
+  "version": "0.1.4",
   "private": false,
   "scripts": {
     "dev": "vue-cli-service serve",
