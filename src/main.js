@@ -3,11 +3,8 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './styles/olStyle.css';
-import DDD from './index';
 
 Vue.config.productionTip = false;
-
-Vue.use(DDD);
 
 new Vue({
   router,
