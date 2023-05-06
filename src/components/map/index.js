@@ -1,5 +1,14 @@
 import Map from './map.vue';
 
-Map.install = Vue => Vue.component(Map.name, Map);
+function install(Vue, options = {}) {
+  if (install.installed) {
+    return;
+  }
+  install.installed = true;
+  Object.assign(Map, options);
+  Vue.component(Map.name, Map);
+}
 
-export default Map;
+export default install;
+
+export { install, Map };
