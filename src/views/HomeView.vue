@@ -3,6 +3,7 @@
     <div v-for="item in routes" :key="item.name" class="tempClass" v-show="item.name !== 'home'" @click="handleClick(item)">
       {{ item.name }}
     </div>
+    <ucen-ol-map></ucen-ol-map>
   </div>
 </template>
 

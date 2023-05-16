@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build  --mode npm",
-    "lib:build": "vue-cli-service build --target lib --name test-he-ol-map-npm --dest lib src/components/index.js",
+    "lib:build": "vue-cli-service build --target lib --name test-he-ol-map-npm --dest lib src/components/index.js"
   },
   "main": "lib/index/index.js",
   "dependencies": {

@@ -34,6 +34,11 @@ export default {
       mapConf: cloneDeep(mapDefaultConfig)
     };
   },
+  provide: function () {
+    return {
+      map: () => this.map
+    };
+  },
   watch: {
     mapConfig: {
       handler(newVal) {
