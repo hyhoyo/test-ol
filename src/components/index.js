@@ -1,4 +1,5 @@
-import UcenOlMap from './map';
+import Map, { Map as UcenOlMap } from './map';
+import Scatter, { Scatter as UcenOlScatter } from './scatter';
 
 export default function install(Vue, options = {}) {
   if (install.installed) {
@@ -6,7 +7,8 @@ export default function install(Vue, options = {}) {
   }
   install.installed = true;
 
-  Vue.use(UcenOlMap, options);
+  Vue.use(Map, options);
+  Vue.use(Scatter, options);
 }
 
-export { install, UcenOlMap };
+export { install, UcenOlMap, UcenOlScatter };

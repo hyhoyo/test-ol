@@ -12,5 +12,6 @@
   "files.insertFinalNewline": true,
   "useTabs": false,
   "endOfLine": "auto",
-  "ignorePath": ".gnore"
+  "ignorePath": ".gnore",
+  "no-unused-vars":"off"
 }

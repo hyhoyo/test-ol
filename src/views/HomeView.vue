@@ -8,10 +8,13 @@
 </template>
 
 <script>
+import { UcenOlMap } from '../components/index';
 import { routes } from '@/router';
 export default {
   name: 'HomeView',
-  components: {},
+  components: {
+    UcenOlMap
+  },
   data() {
     return {
       routes

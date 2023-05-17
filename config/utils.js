@@ -44,7 +44,6 @@ module.exports = {
       }
       return fileObj;
     }, {});
-    console.log('=================>>>>111', componentEntries);
     return componentEntries;
   }
 };
