@@ -1,5 +1,7 @@
 <template>
-  <div class="map-container" :id="id"></div>
+  <div class="map-container" :id="id">
+    <slot v-if="map" />
+  </div>
 </template>
 <script>
 import { getUuid } from '../../utils/index.js';
