@@ -1,5 +1,3 @@
-# ucen-map
-
 ## Project setup
 
 ```
