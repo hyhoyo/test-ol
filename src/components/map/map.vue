@@ -15,7 +15,7 @@ import VectorTileLayer from 'ol/layer/VectorTile.js';
 import VectorTile from 'ol/source/VectorTile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
-import { mapDefaultConfig } from './config.js';
+import { mapDefaultConfig } from '../../config/mapConfig.js';
 export default {
   name: 'UcenOlMap',
   props: {
@@ -117,7 +117,6 @@ export default {
             continue;
           }
           const source = cloneDeep(item.source);
-          console.log(source);
           delete item.source;
           if (source.url) {
             source.format = new GeoJSON();

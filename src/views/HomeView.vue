@@ -7,7 +7,7 @@
       <!-- <ucen-ol-vector-layer>
         <ucen-ol-scatter></ucen-ol-scatter>
       </ucen-ol-vector-layer> -->
-      <ucen-ol-point :position="[103.6, 35]"></ucen-ol-point>
+      <ucen-ol-point :position="[103.6, 35]" :styles="styles"></ucen-ol-point>
     </ucen-ol-map>
   </div>
 </template>
@@ -25,10 +25,23 @@ export default {
   },
   data() {
     return {
-      routes
+      routes,
+      styles: undefined
     };
   },
-  mounted() {},
+  mounted() {
+    setTimeout(() => {
+      console.log('=============>>>>111');
+      this.styles = {
+        text: {
+          text: '100',
+          padding: [4, 7, 4, 7],
+          fill: '#000000',
+          backgroundFill: 'red'
+        }
+      };
+    }, 3000);
+  },
   methods: {
     handleClick(item) {
       this.$router.push({ name: item.name });

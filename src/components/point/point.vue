@@ -6,6 +6,9 @@ import { createVectorLayer } from '@/utils/olFn';
 import { Feature } from 'ol';
 import { fromLonLat } from 'ol/proj';
 import { Point } from 'ol/geom';
+import { createStyleFn } from '@/utils/olFn';
+import { getUuid } from '@/utils';
+import { Fill, Style, Text } from 'ol/style';
 export default {
   name: 'UcenOlPoint',
   props: {
@@ -15,9 +18,7 @@ export default {
     },
     styles: {
       type: Object,
-      default: () => {
-        return {};
-      }
+      default: () => undefined
     }
   },
   inject: {
@@ -30,6 +31,19 @@ export default {
       default: undefined
     }
   },
+  watch: {
+    styles: {
+      handler(newVal) {
+        if (!newVal || Object.keys(newVal).length > 0) {
+          let _style = createStyleFn(newVal);
+          const feature = this.getFeatureById(this.id);
+          if (feature) {
+            feature.setStyle(_style);
+          }
+        }
+      }
+    }
+  },
   computed: {
     baseVectorLayer: function () {
       return this.vectorLayer && this.vectorLayer();
@@ -40,7 +54,8 @@ export default {
   },
   data() {
     return {
-      defaultCollectionPointsLayer: undefined
+      id: `Point-${getUuid()}`,
+      collectionPointsLayer: undefined
     };
   },
   created() {
@@ -56,6 +71,9 @@ export default {
     load() {
       this.getLayer();
       this.drawPoint();
+    },
+    getFeatureById(id) {
+      return this.collectionPointsLayer.getSource().getFeatureById(id);
     },
     getLayer() {
       if (this.baseVectorLayer) {
@@ -75,7 +93,11 @@ export default {
     },
     drawPoint() {
       const point = new Feature(new Point(fromLonLat(this.position)));
-      point.setStyle({});
+      point.setId(this.id);
+      if (this.styles) {
+        const style = createStyleFn(this.styles);
+        point.setStyle(style);
+      }
       this.collectionPointsLayer.getSource().addFeature(point);
     }
   }
