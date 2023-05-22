@@ -10,33 +10,13 @@ const isString = data => {
   return typeof data === 'string';
 };
 
-const createFillFn = color => {
-  let rebuildColor = color;
-  if (isString(color)) {
-    rebuildColor = new Fill({
-      color: color
-    });
-  }
-  return rebuildColor;
-};
-
-const createStrokeFn = color => {
-  let rebuildColor = color;
-  if (isString(color)) {
-    rebuildColor = new Stroke({
-      color: color
-    });
-  }
-  return rebuildColor;
-};
-
 const filterFn = type => {
   switch (type) {
     case 'fill':
     case 'backgroundFill':
-      return createFillFn;
+      return createFill;
     case 'stroke':
-      return createStrokeFn;
+      return createStroke;
   }
 };
 
@@ -52,6 +32,34 @@ const useFilter = style => {
   return style;
 };
 
+const createFill = style => {
+  if (isString(style)) {
+    style = {
+      color: style
+    };
+  }
+  style = useFilter(style);
+  return {
+    fill: new Fill({
+      ...style
+    })
+  };
+};
+
+const createStroke = style => {
+  if (isString(style)) {
+    style = {
+      color: style
+    };
+  }
+  style = useFilter(style);
+  return {
+    stroke: new Stroke({
+      ...style
+    })
+  };
+};
+
 const createCircle = style => {
   style = useFilter(style);
   return {
@@ -63,7 +71,6 @@ const createCircle = style => {
 
 const createText = style => {
   style = useFilter(style);
-  console.log(style);
   return {
     text: new Text({
       ...style
@@ -99,16 +106,15 @@ const createStyleFn = style => {
         Object.assign(rebuildStyle, icon);
         break;
       case 'fill':
-        var fill = createFillFn(data);
+        var fill = createFill(data);
         Object.assign(rebuildStyle, fill);
         break;
       case 'stroke':
-        var stroke = createStrokeFn(data);
+        var stroke = createStroke(data);
         Object.assign(rebuildStyle, stroke);
         break;
     }
   }
-  // console.log('==============>>>Result', rebuildStyle);
   return new Style(rebuildStyle);
 };
 

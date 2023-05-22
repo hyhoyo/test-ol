@@ -11,4 +11,15 @@ const getUuid = () => {
   return uuid;
 };
 
-export { getUuid };
+const ArrayToObject = (data, key, value) => {
+  if (!Array.isArray(data)) {
+    return data || {};
+  }
+  const obj = {};
+  data.forEach(item => {
+    obj[item[key]] = value ? item[value] : item;
+  });
+  return obj;
+};
+
+export { getUuid, ArrayToObject };

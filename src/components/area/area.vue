@@ -2,10 +2,11 @@
   <div></div>
 </template>
 <script>
-import { getUuid } from '@/utils';
+import { ArrayToObject, getUuid } from '@/utils';
 import { createStyleFn, createVectorLayer } from '@/utils/olFn';
 import { Feature } from 'ol';
 import { MultiPolygon, Polygon } from 'ol/geom';
+import { Fill, Stroke, Style } from 'ol/style';
 
 export default {
   name: 'ucenOlArea',
@@ -65,11 +66,33 @@ export default {
     },
     getAreaJson(data) {
       if (!data) return;
-      const json = require(`../../assets/map/${data.level}.json`);
-      this.drawAera(json.features);
+
+      if (!data.data || data.data.length === 0) {
+        const json = require(`../../assets/map/${data.level}.json`);
+        let features = json.features;
+        if (data.code) {
+          features = features.filter(item => data.code === item.properties.id);
+        }
+        this.drawAera(features, this.data.styles);
+      }
+      if (data.data) {
+        const itemJson = require(`../../assets/map/${data.level}/${data.code}.json`);
+        const dataObj = ArrayToObject(data.data, 'code');
+        itemJson.features.forEach(item => {
+          const d = dataObj[item.properties.id];
+          if (d) {
+            item.styles = d.styles;
+          }
+        });
+        this.drawAera(itemJson.features, data.styles);
+      }
     },
-    drawAera(geo) {
+    drawAera(geo, styles) {
       const features = [];
+      if (styles) {
+        const style = createStyleFn(styles);
+        this.areaVectorLayer.setStyle(style);
+      }
       geo.forEach(item => {
         let feature;
         if (item.geometry.type === 'MultiPolygon') {
@@ -81,8 +104,8 @@ export default {
             geometry: new Polygon(item.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
           });
         }
-        if (feature && this.data.styles) {
-          const style = createStyleFn(this.data.styles);
+        if (feature && item.styles) {
+          const style = createStyleFn(item.styles);
           feature.setStyle(style);
         }
         features.push(feature);

@@ -38,7 +38,10 @@ export default {
           {
             code: '510100',
             value: '1000m',
-            coloe: 'green'
+            styles: {
+              fill: '#27ff0080',
+              stroke: 'red'
+            }
           }
         ]
       },

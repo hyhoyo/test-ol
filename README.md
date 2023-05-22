@@ -29,25 +29,33 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 区域-对比图（area）
+
 ```
 {
 	data: {
-		// 选中区域 
+		// 选中区域
 		code: 'xxx',
-		level: 'province', // province || regioncity
+		level: 'province', // province || regioncity,
+		 styles: {
+          fill: 'transparent',
+          stroke: '#000000'
+        },
 		data: [
 			// 区域内
 			{
 				code: 'xx',
 				value: '1000m',
-				color: 'green'
+				styles: {
+              fill: '#27ff0080',
+              stroke: 'red' || {color: 'red', width: 10}
+            }
 			}
 		]
 	}
 }
 ```
 
-### 点-styles中参数与openlayers文档保持一致
+### 点-styles 中参数与 openlayers 文档保持一致
 
 ```
 {
