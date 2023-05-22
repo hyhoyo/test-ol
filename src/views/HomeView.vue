@@ -7,13 +7,14 @@
       <!-- <ucen-ol-vector-layer>
         <ucen-ol-scatter></ucen-ol-scatter>
       </ucen-ol-vector-layer> -->
-      <ucen-ol-point :position="[103.6, 35]" :styles="styles"></ucen-ol-point>
+      <ucen-ol-area :data="areaData"></ucen-ol-area>
+      <!-- <ucen-ol-point :position="[103.6, 35]" :styles="styles"></ucen-ol-point> -->
     </ucen-ol-map>
   </div>
 </template>
 
 <script>
-import { UcenOlMap, UcenOlScatter, UcenOlVectorLayer, UcenOlPoint } from '../components/index';
+import { UcenOlMap, UcenOlScatter, UcenOlVectorLayer, UcenOlPoint, UcenOlArea } from '../components/index';
 import { routes } from '@/router';
 export default {
   name: 'HomeView',
@@ -21,17 +22,32 @@ export default {
     UcenOlMap,
     UcenOlScatter,
     UcenOlVectorLayer,
-    UcenOlPoint
+    UcenOlPoint,
+    UcenOlArea
   },
   data() {
     return {
+      areaData: {
+        level: 'province',
+        code: '51',
+        styles: {
+          fill: 'transparent',
+          stroke: '#000000'
+        },
+        data: [
+          {
+            code: '510100',
+            value: '1000m',
+            coloe: 'green'
+          }
+        ]
+      },
       routes,
       styles: undefined
     };
   },
   mounted() {
     setTimeout(() => {
-      console.log('=============>>>>111');
       this.styles = {
         text: {
           text: '100',

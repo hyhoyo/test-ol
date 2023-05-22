@@ -98,9 +98,17 @@ const createStyleFn = style => {
         var icon = createImage(data);
         Object.assign(rebuildStyle, icon);
         break;
+      case 'fill':
+        var fill = createFillFn(data);
+        Object.assign(rebuildStyle, fill);
+        break;
+      case 'stroke':
+        var stroke = createStrokeFn(data);
+        Object.assign(rebuildStyle, stroke);
+        break;
     }
   }
-  console.log('==============>>>Result', rebuildStyle);
+  // console.log('==============>>>Result', rebuildStyle);
   return new Style(rebuildStyle);
 };
 

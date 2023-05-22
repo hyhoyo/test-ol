@@ -122,7 +122,7 @@ export default {
     },
     vertifyMap() {
       if (!this.baseMap) {
-        throw new Error('未实例化地图');
+        throw '未实例化地图';
       }
     },
     destroy() {
