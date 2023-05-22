@@ -15,7 +15,7 @@ import VectorTileLayer from 'ol/layer/VectorTile.js';
 import VectorTile from 'ol/source/VectorTile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import VectorSource from 'ol/source/Vector.js';
-import { mapDefaultConfig } from '../../config/mapConfig.js';
+import { mapDefaultConfig } from '../../asstets/config/mapConfig.js';
 export default {
   name: 'UcenOlMap',
   props: {
