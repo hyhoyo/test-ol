@@ -1,8 +1,8 @@
-import Map, { Map as UcenOlMap } from './map';
-import Scatter, { Scatter as UcenOlScatter } from './scatter';
-import VectorLayer, { VectorLayer as UcenOlVectorLayer } from './vectorLayer';
-import Point, { Point as UcenOlPoint } from './point';
-import Area, { Area as UcenOlArea } from './area';
+import Map, { Map as UcenOlMap } from './components/map';
+import Scatter, { Scatter as UcenOlScatter } from './components/scatter';
+import VectorLayer, { VectorLayer as UcenOlVectorLayer } from './components/vectorLayer';
+import Point, { Point as UcenOlPoint } from './components/point';
+import Area, { Area as UcenOlArea } from './components/area';
 
 export default function install(Vue, options = {}) {
   if (install.installed) {

@@ -8,10 +8,13 @@
   "bracketSpacing": true,
   "trailingComma": "none",
   "arrowParens": "avoid",
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+  "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+  "spaceBeforeFunctionParen": false,
   "files.insertFinalNewline": true,
   "useTabs": false,
   "endOfLine": "auto",
   "ignorePath": ".gnore",
-  "no-unused-vars":"off"
+  "no-unused-vars": "off"
 }

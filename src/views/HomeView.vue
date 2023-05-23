@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { UcenOlMap, UcenOlScatter, UcenOlVectorLayer, UcenOlPoint, UcenOlArea } from '../components/index';
+import { UcenOlMap, UcenOlScatter, UcenOlVectorLayer, UcenOlPoint, UcenOlArea } from '../index';
 import { routes } from '@/router';
 export default {
   name: 'HomeView',
