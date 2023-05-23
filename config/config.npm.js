@@ -31,13 +31,7 @@ const npmBuildConfig = {
     optimization: {
       minimizer: [
         // 定制压缩选项
-        new TerserPlugin({
-          terserOptions: {
-            output: {
-              comments: false // 去掉注释
-            }
-          }
-        })
+        new TerserPlugin()
       ]
     }
   },

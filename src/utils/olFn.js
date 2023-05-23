@@ -1,7 +1,7 @@
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Style, Fill, Circle, Stroke, Icon, Text } from 'ol/style';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 
 // 需要创建的参数
 const useCreate = ['fill', 'stroke', 'backgroundFill'];

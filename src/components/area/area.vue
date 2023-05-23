@@ -6,7 +6,6 @@ import { ArrayToObject, getUuid } from '@/utils';
 import { createStyleFn, createVectorLayer } from '@/utils/olFn';
 import { Feature } from 'ol';
 import { MultiPolygon, Polygon } from 'ol/geom';
-import { Fill, Stroke, Style } from 'ol/style';
 
 export default {
   name: 'ucenOlArea',
