@@ -34,10 +34,10 @@ const npmBuildConfig = {
         // 定制压缩选项
         new TerserPlugin()
       ]
-    },
-    plugins: [
-      new BundleAnalyzerPlugin()
-    ]
+    }
+    // plugins: [
+    //   new BundleAnalyzerPlugin()
+    // ]
   },
   //  样式输出
   css: {

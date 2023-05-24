@@ -1,6 +1,6 @@
 {
   "name": "test-he-ol-map-npm",
-  "version": "0.1.9",
+  "version": "0.2.2",
   "private": false,
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -11,12 +11,13 @@
   },
   "main": "lib/index/index.js",
   "dependencies": {
+    "ol": "^7.3.0"
+  },
+  "devDependencies": {
     "core-js": "^3.8.3",
     "vue": "^2.6.14",
     "vue-router": "^3.5.1",
-    "vuex": "^3.6.2"
-  },
-  "devDependencies": {
+    "vuex": "^3.6.2",
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
     "@turf/turf": "^6.5.0",
@@ -30,7 +31,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
     "lodash": "^4.17.21",
-    "ol": "^7.3.0",
     "prettier": "^2.8.8",
     "vue-template-compiler": "^2.6.14",
     "webpack-bundle-analyzer": "^4.8.0"

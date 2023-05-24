@@ -141,4 +141,6 @@ export default {
   }
 };
 </script>
-<style scoped></style>
+<style>
+@import url('../../styles/olStyle.css');
+</style>
