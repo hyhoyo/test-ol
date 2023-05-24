@@ -1,6 +1,6 @@
 {
   "name": "test-he-ol-map-npm",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": false,
   "scripts": {
     "dev": "vue-cli-service serve",
@@ -32,7 +32,8 @@
     "lodash": "^4.17.21",
     "ol": "^7.3.0",
     "prettier": "^2.8.8",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.6.14",
+    "webpack-bundle-analyzer": "^4.8.0"
   },
   "eslintConfig": {
     "root": true,

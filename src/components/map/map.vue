@@ -8,7 +8,7 @@ import { getUuid } from '../../utils/index.js';
 import { Map, View } from 'ol';
 import XYZ from 'ol/source/XYZ';
 import TileLayer from 'ol/layer/Tile';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { fromLonLat } from 'ol/proj';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import VectorTileLayer from 'ol/layer/VectorTile.js';

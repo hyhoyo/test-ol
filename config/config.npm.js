@@ -1,5 +1,6 @@
 const { resolve, getComponentEntries } = require('./utils');
 const TerserPlugin = require('terser-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const npmBuildConfig = {
   // 输出文件目录
@@ -33,7 +34,10 @@ const npmBuildConfig = {
         // 定制压缩选项
         new TerserPlugin()
       ]
-    }
+    },
+    plugins: [
+      new BundleAnalyzerPlugin()
+    ]
   },
   //  样式输出
   css: {

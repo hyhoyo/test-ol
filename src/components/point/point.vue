@@ -2,13 +2,12 @@
   <div></div>
 </template>
 <script>
-import { createVectorLayer } from '@/utils/olFn';
+import { createVectorLayer, createStyleFn } from '@/utils/olFn';
 import { Feature } from 'ol';
 import { fromLonLat } from 'ol/proj';
 import { Point } from 'ol/geom';
-import { createStyleFn } from '@/utils/olFn';
 import { getUuid } from '@/utils';
-import { Fill, Style, Text } from 'ol/style';
+
 export default {
   name: 'UcenOlPoint',
   props: {
