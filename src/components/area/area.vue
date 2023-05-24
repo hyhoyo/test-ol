@@ -63,27 +63,43 @@ export default {
         this.baseMap.addLayer(this.areaVectorLayer);
       }
     },
-    getAreaJson(data) {
-      if (!data) return;
+    // getAreaJson(data) {
+    //   if (!data) return;
 
-      if (!data.data || data.data.length === 0) {
-        const json = require(`../../assets/map/${data.level}.json`);
-        let features = json.features;
-        if (data.code) {
-          features = features.filter(item => data.code === item.properties.id);
-        }
-        this.drawAera(features, this.data.styles);
+    //   if (!data.data || data.data.length === 0) {
+    //     const json = require(`../../assets/map/${data.level}.json`);
+    //     let features = json.features;
+    //     if (data.code) {
+    //       features = features.filter(item => data.code === item.properties.id);
+    //     }
+    //     this.drawAera(features, this.data.styles);
+    //   }
+    //   if (data.data) {
+    //     const itemJson = require(`../../assets/map/${data.level}/${data.code}.json`);
+    //     const dataObj = ArrayToObject(data.data, 'code');
+    //     itemJson.features.forEach(item => {
+    //       const d = dataObj[item.properties.id];
+    //       if (d) {
+    //         item.styles = d.styles;
+    //       }
+    //     });
+    //     this.drawAera(itemJson.features, data.styles);
+    //   }
+    // },
+    getAreaJson(data) {
+      if (!data || !data.code) return;
+      if ((!data.data || data.data.length === 0) && data.features) {
+        this.drawAera(data.features, this.data.styles);
       }
-      if (data.data) {
-        const itemJson = require(`../../assets/map/${data.level}/${data.code}.json`);
+      if (data.data && data.features) {
         const dataObj = ArrayToObject(data.data, 'code');
-        itemJson.features.forEach(item => {
+        data.features.forEach(item => {
           const d = dataObj[item.properties.id];
           if (d) {
             item.styles = d.styles;
           }
         });
-        this.drawAera(itemJson.features, data.styles);
+        this.drawAera(data.features, data.styles);
       }
     },
     drawAera(geo, styles) {

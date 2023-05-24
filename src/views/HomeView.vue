@@ -27,27 +27,13 @@ export default {
   },
   data() {
     return {
-      areaData: {
-        level: 'province',
-        code: '51',
-        styles: {
-          fill: 'transparent',
-          stroke: '#000000'
-        },
-        data: [
-          {
-            code: '510100',
-            value: '1000m',
-            styles: {
-              fill: '#27ff0080',
-              stroke: 'red'
-            }
-          }
-        ]
-      },
+      areaData: {},
       routes,
       styles: undefined
     };
+  },
+  created() {
+    this.setAreaData();
   },
   mounted() {
     setTimeout(() => {
@@ -64,6 +50,29 @@ export default {
   methods: {
     handleClick(item) {
       this.$router.push({ name: item.name });
+    },
+    setAreaData() {
+      const areaData = {
+        level: 'province',
+        code: '51',
+        features: [],
+        styles: {
+          fill: 'transparent',
+          stroke: '#000000'
+        },
+        data: [
+          {
+            code: '510100',
+            value: '1000m',
+            styles: {
+              fill: '#27ff0080',
+              stroke: 'red'
+            }
+          }
+        ]
+      };
+      areaData.features = require(`../assets/map/${areaData.level}/${areaData.code}.json`).features;
+      this.areaData = areaData;
     }
   }
 };

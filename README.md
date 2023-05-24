@@ -36,7 +36,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 		// 选中区域
 		code: 'xxx',
 		level: 'province', // province || regioncity,
-		 styles: {
+		features: [],
+		styles: {
           fill: 'transparent',
           stroke: '#000000'
         },
