@@ -79,7 +79,7 @@ export default {
         this.collectionPointsLayer = this.baseVectorLayer
       } else {
         this.baseMap.getLayers().forEach(item => {
-          if (item.getName === 'defaultCollectionPointsLayer') {
+          if (item.get('name') === 'defaultCollectionPointsLayer') {
             this.collectionPointsLayer = item
           }
         })
@@ -92,6 +92,7 @@ export default {
     },
     drawPoint() {
       const point = new Feature(new Point(fromLonLat(this.position)))
+      point.setId(this.id)
       this.setStyle(point)
       this.collectionPointsLayer.getSource().addFeature(point)
     },

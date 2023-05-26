@@ -10,7 +10,7 @@
       <!-- </ucen-ol-vector-layer> -->
       <!-- <ucen-ol-area :data="areaData"></ucen-ol-area> -->
       <!-- <ucen-ol-point :position="[103.6, 35]" :styles="styles"></ucen-ol-point> -->
-      <ucen-ol-points :positions="positions" :styles="styles"></ucen-ol-points>
+      <ucen-ol-points v-if="pointsShow" :positions="positions" :styles="styles"></ucen-ol-points>
     </ucen-ol-map>
   </div>
 </template>
@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      pointsShow: true,
       mapConfig: { zoom: 6 },
       areaData: {},
       routes,
@@ -74,17 +75,18 @@ export default {
   },
   methods: {
     testClick() {
-      const areaData = {
-        level: 'province',
-        code: '11',
-        features: [],
-        styles: {
-          fill: 'transparent',
-          stroke: 'red'
-        }
-      }
-      areaData.features = require(`../assets/map/${areaData.level}/${areaData.code}.json`).features
-      this.areaData = areaData
+      // const areaData = {
+      //   level: 'province',
+      //   code: '11',
+      //   features: [],
+      //   styles: {
+      //     fill: 'transparent',
+      //     stroke: 'red'
+      //   }
+      // }
+      // areaData.features = require(`../assets/map/${areaData.level}/${areaData.code}.json`).features
+      // this.areaData = areaData
+      this.pointsShow = false
     },
     handleClick(item) {
       this.$router.push({ name: item.name })
