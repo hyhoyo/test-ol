@@ -4,14 +4,24 @@
   </div>
 </template>
 <script>
-import { createVectorLayer } from '@/utils/olFn';
+import { createStyleFn, createVectorLayer } from '@/utils/olFn'
 
 export default {
   name: 'UcenOlVectorLayer',
   data() {
     return {
       layer: undefined
-    };
+    }
+  },
+  props: {
+    styles: {
+      type: Object,
+      default: () => undefined
+    },
+    name: {
+      type: String,
+      default: () => undefined
+    }
   },
   inject: {
     map: {
@@ -22,40 +32,57 @@ export default {
   provide: function () {
     return {
       vectorLayer: () => this.layer
-    };
+    }
   },
   computed: {
     baseMap: function () {
-      return this.map && this.map();
+      return this.map && this.map()
+    }
+  },
+  watch: {
+    styles: {
+      handler(newVal) {
+        this.setStyles(newVal)
+      }
     }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
       if (!this.baseMap) {
-        throw '未实例化地图';
+        throw '未实例化地图'
       }
-      this.createLayer();
+      this.createLayer()
     },
     createLayer() {
       if (!this.layer) {
-        this.layer = createVectorLayer();
-        this.baseMap.addLayer(this.layer);
+        this.layer = createVectorLayer()
+        this.baseMap.addLayer(this.layer)
+        if (this.name) {
+          this.layer.set('name', this.name)
+        }
+      }
+      this.setStyles(this.styles)
+    },
+    setStyles(styles) {
+      if (styles) {
+        const style = createStyleFn(styles)
+        this.layer.setStyle(style)
       }
     },
     clear() {
       if (this.layer) {
-        this.layer.getSource().clear();
+        this.layer.getSource().clear()
       }
     },
     remove() {
       if (this.layer) {
-        this.baseMap.removeLayer(this.layer);
-        this.layer = undefined;
+        this.baseMap.removeLayer(this.layer)
+        this.layer = undefined
       }
     }
   }
-};
+}
 </script>

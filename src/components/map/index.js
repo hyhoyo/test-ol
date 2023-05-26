@@ -1,14 +1,14 @@
-import Map from './map.vue';
+import Map from './map.vue'
 
 function install(Vue, options = {}) {
   if (install.installed) {
-    return;
+    return
   }
-  install.installed = true;
-  Object.assign(Map, options);
-  Vue.component(Map.name, Map);
+  install.installed = true
+  Object.assign(Map, options)
+  Vue.component(Map.name, Map)
 }
 
-export default install;
+export default install
 
-export { install, Map };
+export { install, Map }

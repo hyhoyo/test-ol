@@ -189,7 +189,7 @@ var data = [
   { name: '合肥', value: 229 },
   { name: '武汉', value: 273 },
   { name: '大庆', value: 279 }
-];
+]
 
 var geoCoordMap = {
   海门: [121.15, 31.89],
@@ -382,6 +382,6 @@ var geoCoordMap = {
   合肥: [117.27, 31.86],
   武汉: [114.31, 30.52],
   大庆: [125.03, 46.58]
-};
+}
 
-export { data, geoCoordMap };
+export { data, geoCoordMap }

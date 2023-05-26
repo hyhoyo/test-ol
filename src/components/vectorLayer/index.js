@@ -1,14 +1,14 @@
-import VectorLayer from './vectorLayer.vue';
+import VectorLayer from './vectorLayer.vue'
 
 function install(Vue, options = {}) {
   if (install.installed) {
-    return;
+    return
   }
-  install.installed = true;
-  Object.assign(VectorLayer, options);
-  Vue.component(VectorLayer.name, VectorLayer);
+  install.installed = true
+  Object.assign(VectorLayer, options)
+  Vue.component(VectorLayer.name, VectorLayer)
 }
 
-export default install;
+export default install
 
-export { install, VectorLayer };
+export { install, VectorLayer }

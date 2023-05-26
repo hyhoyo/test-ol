@@ -4,18 +4,19 @@
   </div>
 </template>
 <script>
-import { getUuid } from '../../utils/index.js';
-import { Map, View } from 'ol';
-import XYZ from 'ol/source/XYZ';
-import TileLayer from 'ol/layer/Tile';
-import cloneDeep from 'lodash/cloneDeep';
-import { fromLonLat } from 'ol/proj';
-import GeoJSON from 'ol/format/GeoJSON.js';
-import VectorTileLayer from 'ol/layer/VectorTile.js';
-import VectorTile from 'ol/source/VectorTile.js';
-import VectorLayer from 'ol/layer/Vector.js';
-import VectorSource from 'ol/source/Vector.js';
-import { mapDefaultConfig } from '../../assets/config/mapConfig.js';
+import { getUuid } from '../../utils/index.js'
+import { Map, View } from 'ol'
+import XYZ from 'ol/source/XYZ'
+import TileLayer from 'ol/layer/Tile'
+import cloneDeep from 'lodash/cloneDeep'
+import { fromLonLat } from 'ol/proj'
+import GeoJSON from 'ol/format/GeoJSON.js'
+import VectorTileLayer from 'ol/layer/VectorTile.js'
+import VectorTile from 'ol/source/VectorTile.js'
+import VectorLayer from 'ol/layer/Vector.js'
+import VectorSource from 'ol/source/Vector.js'
+import { mapDefaultConfig } from '../../assets/config/mapConfig.js'
+import { createStyleFn } from '@/utils/olFn.js'
 export default {
   name: 'UcenOlMap',
   props: {
@@ -26,7 +27,7 @@ export default {
     mapConfig: {
       type: Object,
       default: () => {
-        return {};
+        return {}
       }
     }
   },
@@ -34,20 +35,20 @@ export default {
     return {
       map: undefined,
       mapConf: cloneDeep(mapDefaultConfig)
-    };
+    }
   },
   provide: function () {
     return {
       map: () => this.map
-    };
+    }
   },
   watch: {
     mapConfig: {
       handler(newVal) {
         if (newVal) {
-          this.mapConf = Object.assign(this.mapConfig, this.mapConf);
+          this.mapConf = Object.assign(this.mapConf, this.mapConfig)
           if (document.getElementById(this.id)) {
-            this.initMap();
+            this.initMap()
           }
         }
       },
@@ -55,91 +56,104 @@ export default {
     }
   },
   mounted() {
-    this.initMap();
+    this.mapConf = Object.assign(this.mapConf, this.mapConfig)
+    this.initMap()
   },
   methods: {
     initMap() {
-      const layers = this.getLayers();
-      this.map = new Map({
-        target: this.id,
-        layers: layers,
-        view: new View({
-          center: fromLonLat(this.mapConf.center),
-          zoom: this.mapConf.zoom,
-          maxZoom: this.mapConf.maxZoom,
-          minZoom: this.mapConf.minZoom
+      if (!this.map) {
+        const layers = this.getLayers()
+        this.map = new Map({
+          target: this.id,
+          layers: layers,
+          view: new View({
+            center: fromLonLat(this.mapConf.center),
+            zoom: this.mapConf.zoom,
+            maxZoom: this.mapConf.maxZoom,
+            minZoom: this.mapConf.minZoom
+          })
         })
-      });
-      this.setGeojsonLayers();
-      this.setVectorLayers();
-      this.$emit('ready', this.map);
+        this.setGeojsonLayers()
+        this.setVectorLayers()
+        this.$emit('ready', this.map)
+      }
     },
     getLayers() {
-      const baseMapConf = this.mapConf.basemap;
+      const baseMapConf = this.mapConf.basemap
       const layers = baseMapConf.map(item => {
-        let layer;
+        let layer
         if (item.name === 'xyz') {
           layer = new TileLayer({
             source: new XYZ({
               ...item
             }),
             visible: item.visible
-          });
+          })
         }
-        return layer;
-      });
-      return layers.filter(item => item);
+        return layer
+      })
+      return layers.filter(item => item)
     },
     setVectorLayers() {
-      const vectorMapConf = this.mapConf.vectormap;
+      const vectorMapConf = this.mapConf.vectormap
       if (vectorMapConf && this.map) {
         for (let item of vectorMapConf) {
           if (!item.source) {
-            continue;
+            continue
           }
-          const source = cloneDeep(item.source);
-          delete item.source;
+          const source = cloneDeep(item.source)
+          delete item.source
           const layer = new VectorTileLayer({
             ...item,
             source: new VectorTile({
               ...source
             })
-          });
-          this.map.addLayer(layer);
+          })
+          layer.set('_id', item.id)
+          if (item.styles) {
+            const style = createStyleFn(item.styles)
+            layer.setStyle(style)
+          }
+          this.map.addLayer(layer)
         }
       }
     },
     setGeojsonLayers() {
-      const geoMapConf = this.mapConf.geojson;
+      const geoMapConf = this.mapConf.geojson
       if (geoMapConf && this.map) {
         for (let item of geoMapConf) {
-          if (!item.source) {
-            continue;
+          if (!item.source || !item.visible) {
+            continue
           }
-          const source = cloneDeep(item.source);
-          delete item.source;
+          const source = cloneDeep(item.source)
+          delete item.source
           if (source.url) {
-            source.format = new GeoJSON();
+            source.format = new GeoJSON()
           }
           const layer = new VectorLayer({
             ...item,
             source: new VectorSource({
               ...source
             })
-          });
-          this.map.addLayer(layer);
+          })
+          layer.set('_id', item.id)
+          if (item.styles) {
+            const style = createStyleFn(item.styles)
+            layer.setStyle(style)
+          }
+          this.map.addLayer(layer)
         }
       }
     },
     setCenter(center) {
       if (this.map) {
-        this.map.setCenter(center);
+        this.map.setCenter(center)
       } else {
-        new Error('未找到实例化地图');
+        new Error('未找到实例化地图')
       }
     }
   }
-};
+}
 </script>
 <style>
 @import url('../../styles/olStyle.css');

@@ -1,14 +1,14 @@
-import Scatter from './scatter.vue';
+import Scatter from './scatter.vue'
 
 function install(Vue, options = {}) {
   if (install.installed) {
-    return;
+    return
   }
-  install.installed = true;
-  Object.assign(Scatter, options);
-  Vue.component(Scatter.name, Scatter);
+  install.installed = true
+  Object.assign(Scatter, options)
+  Vue.component(Scatter.name, Scatter)
 }
 
-export default install;
+export default install
 
-export { install, Scatter };
+export { install, Scatter }

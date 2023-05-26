@@ -2,11 +2,12 @@
   <div></div>
 </template>
 <script>
-import { createVectorLayer, createStyleFn } from '@/utils/olFn';
-import { Feature } from 'ol';
-import { fromLonLat } from 'ol/proj';
-import { Point } from 'ol/geom';
-import { getUuid } from '@/utils';
+import { assignStyleFn, createVectorLayer, getStyleFn } from '@/utils/olFn'
+import { Feature } from 'ol'
+import { fromLonLat } from 'ol/proj'
+import { Point } from 'ol/geom'
+import { createStyleFn } from '@/utils/olFn'
+import { getUuid } from '@/utils'
 
 export default {
   name: 'UcenOlPoint',
@@ -34,10 +35,9 @@ export default {
     styles: {
       handler(newVal) {
         if (!newVal || Object.keys(newVal).length > 0) {
-          let _style = createStyleFn(newVal);
-          const feature = this.getFeatureById(this.id);
+          const feature = this.getFeatureById(this.id)
           if (feature) {
-            feature.setStyle(_style);
+            this.setStyle(feature)
           }
         }
       }
@@ -45,60 +45,73 @@ export default {
   },
   computed: {
     baseVectorLayer: function () {
-      return this.vectorLayer && this.vectorLayer();
+      return this.vectorLayer && this.vectorLayer()
     },
     baseMap: function () {
-      return this.map && this.map();
+      return this.map && this.map()
     }
   },
   data() {
     return {
       id: `Point-${getUuid()}`,
       collectionPointsLayer: undefined
-    };
+    }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     init() {
       if (!this.baseMap) {
-        throw '未实例化地图';
+        throw '未实例化地图'
       }
-      this.load();
+      this.load()
     },
     load() {
-      this.getLayer();
-      this.drawPoint();
+      this.getLayer()
+      this.drawPoint()
     },
     getFeatureById(id) {
-      return this.collectionPointsLayer.getSource().getFeatureById(id);
+      return this.collectionPointsLayer.getSource().getFeatureById(id)
     },
     getLayer() {
       if (this.baseVectorLayer) {
-        this.collectionPointsLayer = this.baseVectorLayer;
+        this.collectionPointsLayer = this.baseVectorLayer
       } else {
         this.baseMap.getLayers().forEach(item => {
           if (item.getName === 'defaultCollectionPointsLayer') {
-            this.collectionPointsLayer = item;
+            this.collectionPointsLayer = item
           }
-        });
+        })
         if (!this.collectionPointsLayer) {
-          this.collectionPointsLayer = createVectorLayer();
-          this.collectionPointsLayer.set('name', 'defaultCollectionPointsLayer');
-          this.baseMap.addLayer(this.collectionPointsLayer);
+          this.collectionPointsLayer = createVectorLayer()
+          this.collectionPointsLayer.set('name', 'defaultCollectionPointsLayer')
+          this.baseMap.addLayer(this.collectionPointsLayer)
         }
       }
     },
     drawPoint() {
-      const point = new Feature(new Point(fromLonLat(this.position)));
-      point.setId(this.id);
+      const point = new Feature(new Point(fromLonLat(this.position)))
+      this.setStyle(point)
+      this.collectionPointsLayer.getSource().addFeature(point)
+    },
+    setStyle(feature) {
+      const oldStyle = this.collectionPointsLayer.getStyle()
       if (this.styles) {
-        const style = createStyleFn(this.styles);
-        point.setStyle(style);
+        let style = createStyleFn(this.styles)
+        style = assignStyleFn(oldStyle, style)
+        feature.setStyle(style)
       }
-      this.collectionPointsLayer.getSource().addFeature(point);
+    },
+    removePoint() {
+      if (this.collectionPointsLayer) {
+        const feature = this.getFeatureById(this.id)
+        this.collectionPointsLayer.getSource().removeFeature(feature)
+      }
     }
+  },
+  beforeDestroy() {
+    this.removePoint()
   }
-};
+}
 </script>

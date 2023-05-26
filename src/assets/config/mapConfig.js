@@ -14,15 +14,19 @@ const mapDefaultConfig = {
   ],
   vectormap: [],
   geojson: [
-    // {
-    //   id: 'cityjson',
-    //   name: 'geojson',
-    //   visible: true,
-    //   source: {
-    //     url: 'http://172.39.8.63:8000/assets/city.json'
-    //   }
-    // }
+    {
+      id: 'cityjson',
+      name: 'geojson',
+      visible: true,
+      source: {
+        url: 'http://172.39.8.63:8000/assets/city.json'
+      }
+      // styles: {
+      //   fill: 'transparent',
+      //   stroke: 'red'
+      // }
+    }
   ]
-};
+}
 
-export { mapDefaultConfig };
+export { mapDefaultConfig }

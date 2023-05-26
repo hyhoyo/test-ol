@@ -1,4 +1,16 @@
 {
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "printWidth": 200,
   "eslintIntegration": false,
   "stylelintIntegration": true,
@@ -8,13 +20,18 @@
   "bracketSpacing": true,
   "trailingComma": "none",
   "arrowParens": "avoid",
-  "javascript.format.insertSpaceBeforeFunctionParenthesis": false,
-  "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
-  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "spaceBeforeFunctionParen": false,
   "files.insertFinalNewline": true,
   "useTabs": false,
   "endOfLine": "auto",
   "ignorePath": ".gnore",
-  "no-unused-vars": "off"
+  "no-unused-vars": "off",
+  "proseWrap": "preserve",
+  "disableLanguages": ["vue"],
+  "htmlWhitespaceSensitivity": "ignore",
+  "jsxBracketSameLine": false,
+  "jsxSingleQuote": false,
+  "parser": "babylon",
+  "requireConfig": false,
+  "tslintIntegration": false
 }

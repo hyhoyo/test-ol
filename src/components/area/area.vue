@@ -2,10 +2,10 @@
   <div></div>
 </template>
 <script>
-import { ArrayToObject, getUuid } from '@/utils';
-import { createStyleFn, createVectorLayer } from '@/utils/olFn';
-import { Feature } from 'ol';
-import { MultiPolygon, Polygon } from 'ol/geom';
+import { ArrayToObject, getUuid } from '@/utils'
+import { createStyleFn, createVectorLayer } from '@/utils/olFn'
+import { Feature } from 'ol'
+import { MultiPolygon, Polygon } from 'ol/geom'
 
 export default {
   name: 'ucenOlArea',
@@ -18,15 +18,17 @@ export default {
   inject: ['map'],
   computed: {
     baseMap: function () {
-      return this.map && this.map();
+      return this.map && this.map()
     }
   },
   watch: {
     data: {
       handler(newVal) {
-        if (!newVal.code) {
-          return;
+        this.clear()
+        if (!newVal.features) {
+          return
         }
+        this.getAreaJson(newVal)
       },
       deep: true
     }
@@ -36,98 +38,77 @@ export default {
       id: `Area-${getUuid()}`,
       areaVectorLayer: undefined,
       itemVectorLayer: undefined
-    };
+    }
   },
   created() {
-    this.init();
-    this.getLayer();
-    this.getAreaJson(this.data);
+    this.init()
+    this.getLayer()
+    this.getAreaJson(this.data)
   },
   methods: {
     init() {
       if (!this.baseMap) {
-        throw '未实例化地图';
+        throw '未实例化地图'
       }
-      this.load();
     },
-    load() {},
     getLayer() {
-      this.baseMap.getLayers().forEach(item => {
-        if (item.getName === 'defaultCollectionAreaLayer') {
-          this.areaVectorLayer = item;
-        }
-      });
       if (!this.areaVectorLayer) {
-        this.areaVectorLayer = createVectorLayer();
-        this.areaVectorLayer.set('name', 'defaultCollectionAreaLayer');
-        this.baseMap.addLayer(this.areaVectorLayer);
+        this.areaVectorLayer = createVectorLayer()
+        this.areaVectorLayer.set('_id', this.id)
+        this.baseMap.addLayer(this.areaVectorLayer)
       }
     },
-    // getAreaJson(data) {
-    //   if (!data) return;
-
-    //   if (!data.data || data.data.length === 0) {
-    //     const json = require(`../../assets/map/${data.level}.json`);
-    //     let features = json.features;
-    //     if (data.code) {
-    //       features = features.filter(item => data.code === item.properties.id);
-    //     }
-    //     this.drawAera(features, this.data.styles);
-    //   }
-    //   if (data.data) {
-    //     const itemJson = require(`../../assets/map/${data.level}/${data.code}.json`);
-    //     const dataObj = ArrayToObject(data.data, 'code');
-    //     itemJson.features.forEach(item => {
-    //       const d = dataObj[item.properties.id];
-    //       if (d) {
-    //         item.styles = d.styles;
-    //       }
-    //     });
-    //     this.drawAera(itemJson.features, data.styles);
-    //   }
-    // },
     getAreaJson(data) {
-      if (!data || !data.code) return;
-      if ((!data.data || data.data.length === 0) && data.features) {
-        this.drawAera(data.features, this.data.styles);
+      if (!data || !data.features || data.features.length === 0) return
+      if (!data.data || data.data.length === 0) {
+        this.drawAera(data.features, this.data.styles)
       }
-      if (data.data && data.features) {
-        const dataObj = ArrayToObject(data.data, 'code');
+      if (data.data) {
+        const dataObj = ArrayToObject(data.data, 'code')
         data.features.forEach(item => {
-          const d = dataObj[item.properties.id];
+          const d = dataObj[item.properties.id]
           if (d) {
-            item.styles = d.styles;
+            item.styles = d.styles
           }
-        });
-        this.drawAera(data.features, data.styles);
+        })
+        this.drawAera(data.features, data.styles)
       }
     },
     drawAera(geo, styles) {
-      const features = [];
+      const features = []
       if (styles) {
-        const style = createStyleFn(styles);
-        this.areaVectorLayer.setStyle(style);
+        const style = createStyleFn(styles)
+        this.areaVectorLayer.setStyle(style)
       }
       geo.forEach(item => {
-        let feature;
+        let feature
         if (item.geometry.type === 'MultiPolygon') {
           feature = new Feature({
             geometry: new MultiPolygon(item.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
-          });
+          })
         } else if (item.geometry.type === 'Polygon') {
           feature = new Feature({
             geometry: new Polygon(item.geometry.coordinates).transform('EPSG:4326', 'EPSG:3857')
-          });
+          })
         }
         if (feature && item.styles) {
-          const style = createStyleFn(item.styles);
-          feature.setStyle(style);
+          const style = createStyleFn(item.styles)
+          feature.setStyle(style)
         }
-        features.push(feature);
-      });
+        features.push(feature)
+      })
 
-      this.areaVectorLayer.getSource().addFeatures(features);
+      this.areaVectorLayer.getSource().addFeatures(features)
+    },
+    clear() {
+      this.areaVectorLayer.getSource().clear()
+    }
+  },
+  beforeDestroy() {
+    if (this.areaVectorLayer) {
+      this.baseMap.removeLayer(this.areaVectorLayer)
+      this.areaVectorLayer = undefined
     }
   }
-};
+}
 </script>

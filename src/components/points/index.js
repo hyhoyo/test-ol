@@ -1,14 +1,14 @@
-import Point from './point.vue'
+import Points from './points.vue'
 
 function install(Vue, options = {}) {
   if (install.installed) {
     return
   }
   install.installed = true
-  Object.assign(Point, options)
-  Vue.component(Point.name, Point)
+  Object.assign(Points, options)
+  Vue.component(Points.name, Points)
 }
 
 export default install
 
-export { install, Point }
+export { install, Points }
