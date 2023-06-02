@@ -2,6 +2,7 @@ import VectorLayer from 'ol/layer/Vector'
 import VectorSource from 'ol/source/Vector'
 import { Style, Fill, Circle, Stroke, Icon, Text } from 'ol/style'
 import cloneDeep from 'lodash/cloneDeep'
+import { defaultStyleConfig } from '@/assets/config/mapConfig'
 
 // 需要创建的参数
 const useCreate = ['fill', 'stroke', 'backgroundFill']
@@ -110,7 +111,6 @@ const createStyleFn = style => {
   let rebuildStyle = {}
   for (let key in _style) {
     const data = _style[key]
-    console.log(key)
     switch (key) {
       case 'text':
         var text = createText(data)
@@ -171,4 +171,71 @@ const createVectorLayer = () => {
   })
 }
 
-export { createStyleFn, createVectorLayer, getStyleFn, assignStyleFn }
+function compareArray(arr1, arr2) {
+  const ArrayToJSON = arr => {
+    let json = {}
+    arr.map((item, index) => {
+      if (!json[item]) {
+        json[item] = index + 1
+      }
+    })
+    return json
+  }
+
+  var leftJSON = ArrayToJSON(arr1)
+  var rightJSON = ArrayToJSON(arr2)
+
+  for (var key in leftJSON) {
+    if (rightJSON[key]) {
+      delete rightJSON[key]
+      delete leftJSON[key]
+    }
+  }
+  return {
+    arr1: Object.keys(leftJSON),
+    arr2: Object.keys(rightJSON)
+  }
+}
+
+const mergaStyleFn = (styles, defaultStyle) => {
+  let styleObj = cloneDeep(styles)
+  if (Object.keys(defaultStyle).length > 0) {
+    styleObj = recusionStyleFn({}, styles, defaultStyle)
+  }
+  styleObj = recusionStyleFn({}, defaultStyleConfig, styleObj)
+  return styleObj
+}
+
+const mergaDefaultStyleFn = styles => {
+  return recusionStyleFn({}, defaultStyleConfig, styles)
+}
+
+const recusionStyleFn = (callback, styles, defaultStyle) => {
+  defaultStyle = cloneDeep(defaultStyle) || {}
+  styles = cloneDeep(styles) || {}
+  const key1 = Object.keys(defaultStyle)
+  const key2 = Object.keys(styles)
+  const compareObj = compareArray(key1, key2)
+
+  compareObj.arr1.forEach(item => {
+    callback[item] = defaultStyle[item]
+  })
+
+  compareObj.arr2.forEach(item => {
+    callback[item] = styles[item]
+  })
+
+  for (let key in styles) {
+    const item = styles[key]
+    const defaultItem = defaultStyle ? defaultStyle[key] : {}
+    if (typeof item === 'object') {
+      callback[key] = {}
+      recusionStyleFn(callback[key], defaultItem, item)
+    } else {
+      callback[key] = item
+    }
+  }
+  return callback
+}
+
+export { createStyleFn, createVectorLayer, getStyleFn, assignStyleFn, mergaStyleFn, recusionStyleFn }

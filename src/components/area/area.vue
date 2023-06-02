@@ -3,9 +3,10 @@
 </template>
 <script>
 import { ArrayToObject, getUuid } from '@/utils'
-import { createStyleFn, createVectorLayer } from '@/utils/olFn'
+import { createStyleFn, createVectorLayer, mergaStyleFn, recusionStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { MultiPolygon, Polygon } from 'ol/geom'
+import { defaultStyleConfig } from '@/assets/config/mapConfig'
 
 export default {
   name: 'ucenOlArea',
@@ -13,6 +14,10 @@ export default {
     data: {
       type: Object,
       default: () => undefined
+    },
+    styles: {
+      type: Object,
+      default: () => defaultStyleConfig
     }
   },
   inject: ['map'],
@@ -61,7 +66,9 @@ export default {
     getAreaJson(data) {
       if (!data || !data.features || data.features.length === 0) return
       if (!data.data || data.data.length === 0) {
-        this.drawAera(data.features, this.data.styles)
+        let styles = this.data.styles
+        styles = mergaStyleFn(styles, this.styles)
+        this.drawAera(data.features, styles)
       }
       if (data.data) {
         const dataObj = ArrayToObject(data.data, 'code')
@@ -71,7 +78,9 @@ export default {
             item.styles = d.styles
           }
         })
-        this.drawAera(data.features, data.styles)
+        let styles = data.styles
+        styles = mergaStyleFn(styles, this.styles)
+        this.drawAera(data.features, styles)
       }
     },
     drawAera(geo, styles) {
@@ -92,7 +101,9 @@ export default {
           })
         }
         if (feature && item.styles) {
-          const style = createStyleFn(item.styles)
+          let styles = item.styles
+          styles = mergaStyleFn(styles, this.styles)
+          const style = createStyleFn(styles)
           feature.setStyle(style)
         }
         features.push(feature)
