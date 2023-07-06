@@ -30,10 +30,29 @@ const mapDefaultConfig = {
 }
 
 const defaultStyleConfig = {
-  stroke: '#3399CC',
-  text: {
-    font: '20px Avenir, Helvetica, Arial, sans-serif',
-    color: '#000000'
+  areaCompare: {
+    stroke: '#3399CC'
+  },
+  scatter: {
+    circle: {
+      stroke: '#319FD3',
+      fill: 'rgba(255, 255, 255, 0.6)',
+      radius: 5,
+      width: 1
+    }
+  },
+  point: {
+    circle: {
+      stroke: '#319FD3',
+      fill: 'rgba(255, 255, 255, 0.6)',
+      radius: 5,
+      width: 1
+    }
+  },
+  polygon: {
+    stroke: '#319FD3',
+    fill: 'rgba(255, 255, 255, 0.6)',
+    width: 1
   }
 }
 

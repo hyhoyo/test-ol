@@ -17,6 +17,7 @@ import VectorLayer from 'ol/layer/Vector.js'
 import VectorSource from 'ol/source/Vector.js'
 import { mapDefaultConfig } from '../../assets/config/mapConfig.js'
 import { createStyleFn } from '@/utils/olFn.js'
+import Select from 'ol/interaction/Select.js'
 export default {
   name: 'UcenOlMap',
   props: {
@@ -34,7 +35,9 @@ export default {
   data() {
     return {
       map: undefined,
-      mapConf: cloneDeep(mapDefaultConfig)
+      mapConf: cloneDeep(mapDefaultConfig),
+      selectClick: undefined,
+      selectFn: undefined
     }
   },
   provide: function () {
@@ -60,6 +63,20 @@ export default {
     this.initMap()
   },
   methods: {
+    onSelectClick() {
+      if (!this.selectClick) {
+        this.selectClick = new Select()
+        this.map.addInteraction(this.selectClick)
+        this.selectFn = e => {
+          let features = e.target.getFeatures().getArray()
+          if (features.length === 1 || features.length === 0) {
+            features = features[0]
+          }
+          this.$emit('select', features)
+        }
+        this.selectClick.on('select', this.selectFn)
+      }
+    },
     initMap() {
       if (!this.map) {
         const layers = this.getLayers()
@@ -76,6 +93,7 @@ export default {
         this.setGeojsonLayers()
         this.setVectorLayers()
         this.$emit('ready', this.map)
+        this.onSelectClick()
       }
     },
     getLayers() {
@@ -151,6 +169,11 @@ export default {
       } else {
         new Error('未找到实例化地图')
       }
+    }
+  },
+  beforeDestroy() {
+    if (this.selectClick) {
+      this.selectClick.un('select', this.selectFn)
     }
   }
 }

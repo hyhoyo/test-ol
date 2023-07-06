@@ -3,13 +3,13 @@
 </template>
 <script>
 import { ArrayToObject, getUuid } from '@/utils'
-import { createStyleFn, createVectorLayer, mergaStyleFn, recusionStyleFn } from '@/utils/olFn'
+import { createStyleFn, createVectorLayer, mergaAreaCompareStyleFn, recusionStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { MultiPolygon, Polygon } from 'ol/geom'
 import { defaultStyleConfig } from '@/assets/config/mapConfig'
 
 export default {
-  name: 'ucenOlArea',
+  name: 'UcenOlArea',
   props: {
     data: {
       type: Object,
@@ -18,6 +18,10 @@ export default {
     styles: {
       type: Object,
       default: () => defaultStyleConfig
+    },
+    extent: {
+      type: Boolean,
+      default: () => false
     }
   },
   inject: ['map'],
@@ -34,6 +38,15 @@ export default {
           return
         }
         this.getAreaJson(newVal)
+      },
+      deep: true
+    },
+    styles: {
+      handler(newVal) {
+        if (Object.keys(newVal).length > 0) {
+          this.clear()
+          this.getAreaJson(this.data)
+        }
       },
       deep: true
     }
@@ -67,7 +80,8 @@ export default {
       if (!data || !data.features || data.features.length === 0) return
       if (!data.data || data.data.length === 0) {
         let styles = this.data.styles
-        styles = mergaStyleFn(styles, this.styles)
+        styles = mergaAreaCompareStyleFn(styles, this.styles)
+        console.log(styles)
         this.drawAera(data.features, styles)
       }
       if (data.data) {
@@ -79,7 +93,7 @@ export default {
           }
         })
         let styles = data.styles
-        styles = mergaStyleFn(styles, this.styles)
+        styles = mergaAreaCompareStyleFn(styles, this.styles)
         this.drawAera(data.features, styles)
       }
     },
@@ -102,7 +116,7 @@ export default {
         }
         if (feature && item.styles) {
           let styles = item.styles
-          styles = mergaStyleFn(styles, this.styles)
+          styles = mergaAreaCompareStyleFn(styles, this.styles)
           const style = createStyleFn(styles)
           feature.setStyle(style)
         }
@@ -110,9 +124,16 @@ export default {
       })
 
       this.areaVectorLayer.getSource().addFeatures(features)
+      if (this.extent) {
+        this.getExtent()
+      }
     },
     clear() {
       this.areaVectorLayer.getSource().clear()
+    },
+    getExtent() {
+      const extent = this.areaVectorLayer.getSource().getExtent()
+      this.$emit('getExtent', extent)
     }
   },
   beforeDestroy() {

@@ -107,6 +107,7 @@ const createImage = style => {
 }
 
 const createStyleFn = style => {
+  if (!style || Object.keys(style).length === 0) return
   const _style = cloneDeep(style)
   let rebuildStyle = {}
   for (let key in _style) {
@@ -141,7 +142,11 @@ const getStyleFn = Style => {
   const obj = {}
   const text = Style.getText()
   if (text) {
-    obj.text = text
+    if (typeof text === 'object') {
+      obj.text = getText(text)
+    } else {
+      obj.text = text
+    }
   }
   const fill = Style.getFill()
   if (fill) {
@@ -149,7 +154,11 @@ const getStyleFn = Style => {
   }
   const stroke = Style.getStroke()
   if (stroke) {
-    obj.stroke = stroke
+    if (typeof text === 'object') {
+      obj.stroke = getStroke(stroke)
+    } else {
+      obj.stroke = stroke
+    }
   }
   const image = Style.getImage()
   if (image) {
@@ -158,9 +167,27 @@ const getStyleFn = Style => {
   return obj
 }
 
+const getText = text => {
+  return text.getText()
+}
+
+const getStroke = storke => {
+  let obj = {
+    color: storke.getColor(),
+    width: storke.getWidth()
+  }
+  return obj
+}
+
 const assignStyleFn = (Style1, Style2) => {
-  const s1 = getStyleFn(Style1)
-  const s2 = getStyleFn(Style2)
+  let s1 = {},
+    s2 = {}
+  if (Style1) {
+    s1 = getStyleFn(Style1)
+  }
+  if (Style2) {
+    s2 = getStyleFn(Style2)
+  }
   const newStyle = Object.assign({}, s1, s2)
   return new Style(newStyle)
 }
@@ -184,7 +211,7 @@ function compareArray(arr1, arr2) {
 
   var leftJSON = ArrayToJSON(arr1)
   var rightJSON = ArrayToJSON(arr2)
-
+  let include = []
   for (var key in leftJSON) {
     if (rightJSON[key]) {
       delete rightJSON[key]
@@ -197,45 +224,63 @@ function compareArray(arr1, arr2) {
   }
 }
 
-const mergaStyleFn = (styles, defaultStyle) => {
-  let styleObj = cloneDeep(styles)
-  if (Object.keys(defaultStyle).length > 0) {
-    styleObj = recusionStyleFn({}, styles, defaultStyle)
-  }
-  styleObj = recusionStyleFn({}, defaultStyleConfig, styleObj)
-  return styleObj
+const mergaAreaCompareStyleFn = (styles, defaultStyle) => {
+  return mergaStyleFn(styles, defaultStyle, defaultStyleConfig.areaCompare || {})
 }
 
-const mergaDefaultStyleFn = styles => {
-  return recusionStyleFn({}, defaultStyleConfig, styles)
+const mergaScatterStyleFn = (styles, defaultStyle) => {
+  return mergaStyleFn(styles || {}, defaultStyle || {}, defaultStyleConfig.scatter || {})
+}
+
+const mergaPointStyleFn = (styles, defaultStyle) => {
+  return mergaStyleFn(styles || {}, defaultStyle || {}, defaultStyleConfig.point || {})
+}
+
+const mergaPolygonStyleFn = (styles, defaultStyle) => {
+  return mergaStyleFn(styles || {}, defaultStyle || {}, defaultStyleConfig.polygon || {})
+}
+
+const mergaStyleFn = (styles, defaultStyle, defaultStyleConfig) => {
+  let styleObj = cloneDeep(styles)
+  styleObj = recusionStyleFn({}, styles, defaultStyle)
+  styleObj = recusionStyleFn({}, styleObj, defaultStyleConfig)
+  return styleObj
 }
 
 const recusionStyleFn = (callback, styles, defaultStyle) => {
   defaultStyle = cloneDeep(defaultStyle) || {}
   styles = cloneDeep(styles) || {}
-  const key1 = Object.keys(defaultStyle)
-  const key2 = Object.keys(styles)
+  const key2 = Object.keys(defaultStyle)
+  const key1 = Object.keys(styles)
   const compareObj = compareArray(key1, key2)
 
-  compareObj.arr1.forEach(item => {
-    callback[item] = defaultStyle[item]
-  })
-
   compareObj.arr2.forEach(item => {
-    callback[item] = styles[item]
+    callback[item] = defaultStyle[item]
   })
 
   for (let key in styles) {
     const item = styles[key]
     const defaultItem = defaultStyle ? defaultStyle[key] : {}
-    if (typeof item === 'object') {
+    if (typeof item === 'object' && key !== 'offset') {
       callback[key] = {}
-      recusionStyleFn(callback[key], defaultItem, item)
+      recusionStyleFn(callback[key], item, defaultItem)
     } else {
-      callback[key] = item
+      callback[key] = item || defaultItem
     }
   }
   return callback
 }
 
-export { createStyleFn, createVectorLayer, getStyleFn, assignStyleFn, mergaStyleFn, recusionStyleFn }
+const layerByName = (map, name) => {
+  let layer
+  const layers = map.getLayers()
+  layers.forEach(item => {
+    if (item && item.get('name') === name) {
+      layer = item
+      return
+    }
+  })
+  return layer
+}
+
+export { layerByName, createStyleFn, createVectorLayer, getStyleFn, assignStyleFn, mergaStyleFn, recusionStyleFn, mergaAreaCompareStyleFn, mergaScatterStyleFn, mergaPointStyleFn, mergaPolygonStyleFn }

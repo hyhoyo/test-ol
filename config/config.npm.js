@@ -1,6 +1,5 @@
-const { resolve, getComponentEntries } = require('./utils');
-const TerserPlugin = require('terser-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { resolve, getComponentEntries } = require('./utils')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const npmBuildConfig = {
   // 输出文件目录
@@ -8,7 +7,7 @@ const npmBuildConfig = {
   // webpack配置
   configureWebpack: {
     //  入口文件
-    entry: getComponentEntries('src/components'),
+    entry: getComponentEntries(['src/components', 'src/tools']),
     //  输出配置
     output: {
       //  文件名称
@@ -19,7 +18,7 @@ const npmBuildConfig = {
       //  依赖输出
       libraryExport: 'default',
       //  依赖名称
-      library: 'test-he-ol-map-npm'
+      library: 'ucen-ol-map'
     },
     externals: {
       vue: {
@@ -32,12 +31,15 @@ const npmBuildConfig = {
     optimization: {
       minimizer: [
         // 定制压缩选项
-        new TerserPlugin()
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: false
+            }
+          }
+        })
       ]
     }
-    // plugins: [
-    //   new BundleAnalyzerPlugin()
-    // ]
   },
   //  样式输出
   css: {
@@ -47,14 +49,14 @@ const npmBuildConfig = {
     }
   },
   chainWebpack: config => {
-    config.optimization.delete('splitChunks');
-    config.plugins.delete('copy');
-    config.plugins.delete('preload');
-    config.plugins.delete('prefetch');
-    config.plugins.delete('html');
-    config.plugins.delete('hmr');
-    config.entryPoints.delete('app');
+    config.optimization.delete('splitChunks')
+    config.plugins.delete('copy')
+    config.plugins.delete('preload')
+    config.plugins.delete('prefetch')
+    config.plugins.delete('html')
+    config.plugins.delete('hmr')
+    config.entryPoints.delete('app')
   }
-};
+}
 
-module.exports = npmBuildConfig;
+module.exports = npmBuildConfig

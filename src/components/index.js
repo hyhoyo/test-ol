@@ -4,6 +4,8 @@ import VectorLayer from './vectorLayer'
 import Point from './point'
 import Area from './area'
 import Points from './points'
+import Polygon from './polygon'
+import MultiPolygon from './multiPolygon'
 
 export default function install(Vue, options = {}) {
   if (install.installed) {
@@ -17,6 +19,18 @@ export default function install(Vue, options = {}) {
   Vue.use(Point, options)
   Vue.use(Area, options)
   Vue.use(Points, options)
+  Vue.use(Polygon, options)
+  Vue.use(MultiPolygon, options)
 }
 
-export { install, Map as UcenOlMap, Scatter as UcenOlScatter, VectorLayer as UcenOlVectorLayer, Point as UcenOlPoint, Points as UcenOlPoints, Area as UcenOlArea }
+export {
+  install,
+  Map as UcenOlMap,
+  Polygon as UcenOlPolygon,
+  MultiPolygon as UcenOlMultiPolygon,
+  Scatter as UcenOlScatter,
+  VectorLayer as UcenOlVectorLayer,
+  Point as UcenOlPoint,
+  Points as UcenOlPoints,
+  Area as UcenOlArea
+}

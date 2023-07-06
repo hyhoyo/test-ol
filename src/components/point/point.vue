@@ -2,7 +2,7 @@
   <div></div>
 </template>
 <script>
-import { assignStyleFn, createVectorLayer, getStyleFn } from '@/utils/olFn'
+import { createVectorLayer, mergaPointStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { fromLonLat } from 'ol/proj'
 import { Point } from 'ol/geom'
@@ -15,6 +15,10 @@ export default {
     position: {
       type: Array,
       default: () => [0, 0]
+    },
+    extends: {
+      type: [Array, Number, Object, String],
+      default: () => undefined
     },
     styles: {
       type: Object,
@@ -93,15 +97,15 @@ export default {
     drawPoint() {
       const point = new Feature(new Point(fromLonLat(this.position)))
       point.setId(this.id)
+      point.set('extends', this.extends)
       this.setStyle(point)
       this.collectionPointsLayer.getSource().addFeature(point)
     },
     setStyle(feature) {
-      const oldStyle = this.collectionPointsLayer.getStyle()
-      if (this.styles) {
-        let style = createStyleFn(this.styles)
-        style = assignStyleFn(oldStyle, style)
-        feature.setStyle(style)
+      if (feature) {
+        const styles = mergaPointStyleFn(this.styles)
+        const bdStyle = createStyleFn(styles)
+        feature.setStyle(bdStyle)
       }
     },
     removePoint() {

@@ -1,20 +1,29 @@
 {
-  "name": "test-he-ol-map-npm",
-  "version": "0.2.2",
+  "name": "ucen-ol-map",
+  "version": "0.1.0",
+  "description": "发布版ol封装",
+  "author": "hejunbo",
+  "keyword": "ucen-ol-map",
   "private": false,
+  "publishConfig": {
+    "registry": "http://172.39.8.4:8081/repository/npm-releases/"
+  },
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build  --mode npm",
-    "lib:build": "vue-cli-service build --target lib --name test-he-ol-map-npm --dest lib src/index.js"
+    "lib": "vue-cli-service build --mode npm"
   },
   "main": "lib/index/index.js",
   "dependencies": {
     "ol": "^7.3.0",
-    "ucen-ol-map": "^0.1.0"
+    "@turf/turf": "^6.5.0"
   },
   "devDependencies": {
+    "core-js": "^3.8.3",
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2",
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
     "@turf/turf": "^6.5.0",
@@ -23,18 +32,14 @@
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "core-js": "^3.8.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
     "lodash": "^4.17.21",
     "prettier": "^2.8.8",
-    "vue": "^2.6.14",
-    "vue-router": "^3.5.1",
-    "vue-template-compiler": "^2.6.14",
-    "vuex": "^3.6.2",
-    "webpack-bundle-analyzer": "^4.8.0"
+    "test-he-ol-map-npm": "^0.2.0",
+    "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
     "root": true,
@@ -51,8 +56,7 @@
     },
     "rules": {
       "no-unused-vars": "off",
-      "vue/no-unused-components": "off",
-      "space-before-function-paren": "off"
+      "vue/no-unused-components": "off"
     }
   },
   "browserslist": [
