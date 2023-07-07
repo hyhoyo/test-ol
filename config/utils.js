@@ -27,7 +27,6 @@ const callbackFile = (fileObj, path, item) => {
 
   //  文件中的入口文件
   if (isDir) {
-    console.log('=============>>>itemPath', itemPath)
     fileObj[`ucen-ol-${upperCasetoLine(item)}`] = resolve(join(itemPath, 'index.js'))
   } else if (suffix === 'js') {
     //  文件夹外的入口文件

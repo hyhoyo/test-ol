@@ -123,4 +123,5 @@ const _transformLon = (x, y) => {
   return ret
 }
 
+export default { gcj02Tobd09, bd09Togcj02, bd09Towgs84, wgs84Togcj02, wgs84Tobd09, gcj02Towgs84 }
 export { gcj02Tobd09, bd09Togcj02, bd09Towgs84, wgs84Togcj02, wgs84Tobd09, gcj02Towgs84 }

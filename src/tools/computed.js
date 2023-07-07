@@ -25,4 +25,6 @@ const getDistance = (from, to, units = 'kilometers') => {
   return distance(from, to, options)
 }
 
+export default { getArea, getDistance, getPerimeter }
+
 export { getArea, getDistance, getPerimeter }
