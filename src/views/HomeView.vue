@@ -9,17 +9,17 @@
       <!-- <ucen-ol-vector-layer> -->
       <!-- <ucen-ol-scatter :data="scatterData" :styles="scatterStyles"></ucen-ol-scatter> -->
       <!-- </ucen-ol-vector-layer> -->
-      <ucen-ol-area :data="areaData" :styles="areaStyles" extent @getExtent="getExtent"></ucen-ol-area>
+      <!-- <ucen-ol-area :data="areaData" :styles="areaStyles" extent @getExtent="getExtent"></ucen-ol-area> -->
       <!-- <ucen-ol-point :position="[113.7230556, 34.7230556]" :styles="styles"></ucen-ol-point> -->
       <!-- <ucen-ol-point :position="[110, 32.5]" :styles="styles"></ucen-ol-point> -->
-      <!-- <ucen-ol-points v-if="pointsShow" :positions="positions" :styles="styles" :isRender="isRender"></ucen-ol-points> -->
+      <ucen-ol-points v-if="pointsShow" :positions="positions" :styles="styles" :isRender="isRender"></ucen-ol-points>
       <!-- <ucen-ol-polygon :positions="[polygon]"></ucen-ol-polygon> -->
     </ucen-ol-map>
   </div>
 </template>
 
 <script>
-import { UcenOlMap, UcenOlPolygon, UcenOlArea, UcenOlScatter, UcenOlVectorLayer, UcenOlPoint } from '../index'
+import { UcenOlMap, UcenOlPolygon, UcenOlArea, UcenOlScatter, UcenOlVectorLayer, UcenOlPoints } from '../index'
 
 import { routes } from '@/router'
 import { data, geoCoordMap } from './test.js'
@@ -33,7 +33,7 @@ export default {
     UcenOlArea,
     UcenOlScatter,
     UcenOlVectorLayer,
-    UcenOlPoint,
+    UcenOlPoints,
     UcenOlPolygon
   },
   data() {
@@ -156,7 +156,14 @@ export default {
         }
       }
       this.isRender = !this.isRender
-      console.log(this.isRender)
+      this.positions.forEach(item => {
+        item.styles = {
+          text: {
+            text: '测试',
+            fill: '#000000'
+          }
+        }
+      })
     },
     handleClick(item) {
       this.$router.push({ name: item.name })
