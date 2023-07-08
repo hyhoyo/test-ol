@@ -107,7 +107,6 @@ export default {
       const hexGrid = new HexGrid(50000)
       const hexStart = hexGrid.coord2hex([113.7230556, 34.7230556])
       let startPolygon = hexGrid.getHexagon(hexStart)
-      console.log(startPolygon)
       this.polygon = startPolygon
     },
     getExtent(extent) {
@@ -158,9 +157,10 @@ export default {
       this.isRender = !this.isRender
       this.positions.forEach(item => {
         item.styles = {
-          text: {
-            text: '测试',
-            fill: '#000000'
+          icon: {
+            anchor: [0, 0],
+            scale: 1,
+            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAAASCAYAAADFavmwAAAAAXNSR0IArs4c6QAAA39JREFUWEftWD0sNVEQPToKCVEpJISoJeiEqBQqf9GgQjSi8pNIEJWfSjSCCo0IKoVK0EgeiShUEhIFjdDRvS/nu+bb2bv37n6bbLm3e+/N3pk5M+fM7CspAkXkJzMESnJAM8Py70U5oNni6QF0bQ3o7ARaW93uCgWgpSU+lOdnYGAAGBwEpqcD2/V1YGYGmJoCxseBkRHg7s5/V3MzcHQE3N8Dvb1uu6sr4PgY2NgAGLv2p5+4vQWWloCdHWB11djrw7wuLkx8vpMQt7tDT07Mdb4EkhxrpwSUxZmYALa2TEJnZ+Z++qmpCRcuDhA7SRbn8hLY3AQmJ4N7k7qORdrbM/ajo0BlpfuJ09MwBsxrdhYYG/P6cgNKwF5fswX04ADo6wPKyvzdza6+vgbKy/2+JXUpKj/rjjw/Bxobgbq6MEifn8DwcBiI7m5TYBabLNGNwsI2NARxuMAU9nx8/GuKKKAOo0j50lKeHfr9HdCSPuxudfWIToK/7+8Du7sBJSVWgkgJIjjv79G7tT/a8FDO4gDV8ZBJTU1Gwgi8+NVF+y1YFFAmQac08NHIRXmtYzoYVpqB82xvG91yBSSay4BpT/C+voIkdGcSPNFifq8BSwKUNGdM/f3A4qKJx0V53wygv58fYG4urMG/MhcFVPRTEnDpqAtQPvf0FBV0GXBC+fb2aGfoTmHn1tdH6amLJAV5eQFqa8P0fnw0spKG8qTsw0MQO8GhPDHWlCcMKBOTCUhwfGL/P5RnIJyqnJr2UKI26QlvU48JrawApaXudOwO4fNpBpNdZG4IOh6bbUnxMMpfxoQBtYeRawrzYVeH2qAIFBK8nvIdHVHBj1uhfN0vPiThtzcjEfPz5hdhl70Gyn20kcEjOfGzvXkkdazCIwDUFl7RJtcO6FubdEEkiJubYAqzYwksVxbRU/pJ2kmTABWZIhBkxOFhMJh4v+5eWZnof2go2DvjhnFqQAmET7dcjmhPcLq6gOrqQKClU5gAK81D6dAvCa6VLOlFIg5QexOQNYj7r45BlnWxp6aTVXyxaGszEsOdlitXRUVYw1NRvlAooqoqOk1t9SIQtFtYAJaXw0BqW3HONYl7H+ktgGowZZJzwmpNTLvY8279dkPwe3rc2svJzUHGPZdH9N3O394yCHjckHJSPuU0y83dCOR/jmTcGTmgOaAZI5DxdX8AtUI+TU01NucAAAAASUVORK5CYII='
           }
         }
       })

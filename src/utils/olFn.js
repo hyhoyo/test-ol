@@ -261,7 +261,7 @@ const recusionStyleFn = (callback, styles, defaultStyle) => {
   for (let key in styles) {
     const item = styles[key]
     const defaultItem = defaultStyle ? defaultStyle[key] : {}
-    if (typeof item === 'object' && key !== 'offset') {
+    if (typeof item === 'object' && !Array.isArray(item)) {
       callback[key] = {}
       recusionStyleFn(callback[key], item, defaultItem)
     } else {
