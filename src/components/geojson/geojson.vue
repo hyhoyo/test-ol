@@ -3,28 +3,19 @@
 </template>
 <script>
 import { defaultStyleConfig } from '@/assets/config/mapConfig'
-import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
-import { Feature } from 'ol'
-import { MultiPolygon } from 'ol/geom'
+import GeoJSON from 'ol/format/GeoJSON.js'
+import { getUuid } from '@/utils'
 export default {
-  name: 'UcenOlMultiPolygon',
+  name: 'UcenOlGeoJSON',
   props: {
-    positions: {
-      type: Array,
+    geojson: {
+      type: Object,
       default: () => undefined
     },
     styles: {
       type: Object,
       default: () => defaultStyleConfig
-    },
-    extends: {
-      type: [Array, Number, Object, String],
-      default: () => undefined
-    },
-    extent: {
-      type: Boolean,
-      default: () => false
     }
   },
   inject: {
@@ -47,8 +38,8 @@ export default {
   },
   data() {
     return {
-      id: `MultiPolygon-${getUuid()}`,
-      collectionMultiPolygonsLayer: undefined
+      id: `Geojson-${getUuid()}`,
+      collectionGeojsonLayer: undefined
     }
   },
   watch: {
@@ -75,38 +66,38 @@ export default {
     },
     load() {
       this.getLayer()
-      this.drawMultiPolygon()
+      this.drawGeojson()
     },
     getFeature() {
       return this.getFeatureById(this.id)
     },
     getFeatureById(id) {
-      return this.collectionMultiPolygonsLayer.getSource().getFeatureById(id)
+      return this.collectionGeojsonLayer.getSource().getFeatureById(id)
     },
     getLayer() {
       if (this.baseVectorLayer) {
-        this.collectionMultiPolygonsLayer = this.baseVectorLayer
+        this.collectionGeojsonLayer = this.baseVectorLayer
       } else {
         this.baseMap.getLayers().forEach(item => {
-          if (item.get('name') === 'defaultcollectionMultiPolygonsLayer') {
-            this.collectionMultiPolygonsLayer = item
+          if (item.get('name') === 'defaultcollectionGeojsonLayer') {
+            this.collectionGeojsonLayer = item
           }
         })
-        if (!this.collectionMultiPolygonsLayer) {
-          this.collectionMultiPolygonsLayer = createVectorLayer()
-          this.collectionMultiPolygonsLayer.set('name', 'defaultcollectionMultiPolygonsLayer')
-          this.baseMap.addLayer(this.collectionMultiPolygonsLayer)
+        if (!this.collectionGeojsonLayer) {
+          this.collectionGeojsonLayer = createVectorLayer()
+          this.collectionGeojsonLayer.set('id', this.id)
+          this.collectionGeojsonLayer.set('name', 'defaultcollectionGeojsonLayer')
+          this.baseMap.addLayer(this.collectionGeojsonLayer)
         }
       }
     },
-    drawMultiPolygon() {
-      const polygon = new Feature({
-        geometry: new MultiPolygon(this.positions).transform('EPSG:4326', 'EPSG:3857')
+    drawGeojson() {
+      const geojson = new GeoJSON().readFeatures(this.geojson, { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' })
+      console.log(geojson)
+      geojson.forEach(geo => {
+        this.setStyle(geo)
       })
-      polygon.setId(this.id)
-      this.setStyle(polygon)
-      polygon.set('extends', this.extends)
-      this.collectionMultiPolygonsLayer.getSource().addFeature(polygon)
+      this.collectionGeojsonLayer.getSource().addFeatures(geojson)
       this.getExtent()
     },
     setStyle(feature) {
@@ -116,19 +107,21 @@ export default {
         feature.setStyle(style)
       }
     },
-    removeMultiPolygon() {
-      if (this.collectionMultiPolygonsLayer) {
-        const feature = this.getFeatureById(this.id)
-        this.collectionMultiPolygonsLayer.getSource().removeFeature(feature)
+    removeGeojson() {
+      if (this.collectionGeojsonLayer) {
+        const id = this.collectionGeojsonLayer.getSource().get('id')
+        if (id === this.id) {
+          this.collectionGeojsonLayer.getSource().clear()
+        }
       }
     },
     getExtent() {
-      const extent = this.areaVectorLayer.getSource().getExtent()
+      const extent = this.collectionGeojsonLayer.getSource().getExtent()
       this.$emit('getExtent', extent)
     }
   },
   beforeDestroy() {
-    this.removeMultiPolygon()
+    this.removeGeojson()
   }
 }
 </script>

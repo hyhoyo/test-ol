@@ -3,7 +3,7 @@
 </template>
 <script>
 import { ArrayToObject, getUuid } from '@/utils'
-import { createStyleFn, createVectorLayer, mergaAreaCompareStyleFn, recusionStyleFn } from '@/utils/olFn'
+import { createStyleFn, createVectorLayer, mergaAreaCompareStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { MultiPolygon, Polygon } from 'ol/geom'
 import { defaultStyleConfig } from '@/assets/config/mapConfig'
@@ -81,7 +81,6 @@ export default {
       if (!data.data || data.data.length === 0) {
         let styles = this.data.styles
         styles = mergaAreaCompareStyleFn(styles, this.styles)
-        console.log(styles)
         this.drawAera(data.features, styles)
       }
       if (data.data) {
@@ -124,9 +123,7 @@ export default {
       })
 
       this.areaVectorLayer.getSource().addFeatures(features)
-      if (this.extent) {
-        this.getExtent()
-      }
+      this.getExtent()
     },
     clear() {
       this.areaVectorLayer.getSource().clear()

@@ -1,13 +1,13 @@
 <template>
   <UcenOlVectorLayer :styles="styles" :name="'customPoints-' + id">
-    <UcenOlPoint v-for="(item, index) in positions" :key="'points-' + index" :position="item.position" :extends="item.extends" :styles="setStyles(item.styles)" />
+    <UcenOlPoint v-for="(item, index) in positions" :key="`points-${index}-${Math.random()}`" :position="item.position" :extends="item.extends" :styles="setStyles(item.styles)" />
   </UcenOlVectorLayer>
 </template>
 <script>
 import { getUuid } from '@/utils'
 import UcenOlPoint from '../point/point.vue'
 import UcenOlVectorLayer from '../vectorLayer/vectorLayer.vue'
-import { layerByName, mergaPointStyleFn } from '@/utils/olFn'
+import { createVectorLayer, layerByName, mergaPointStyleFn } from '@/utils/olFn'
 import { getVectorContext } from 'ol/render'
 import { linear } from 'ol/easing'
 import { Stroke, Style, Circle as CircleStyle } from 'ol/style'
@@ -22,7 +22,8 @@ export default {
   inject: {
     map: {
       from: 'map',
-      default: undefined
+      default: undefined,
+      renderLayer: undefined
     }
   },
   computed: {
@@ -64,8 +65,17 @@ export default {
   methods: {
     useRender() {
       if (this.isRender) {
+        if (!this.renderLayer) {
+          this.renderLayer = createVectorLayer()
+          this.renderLayer.setZIndex(99)
+          this.baseMap.addLayer(this.renderLayer)
+        }
         this.render()
       } else {
+        if (this.renderLayer) {
+          this.baseMap.removeLayer(this.renderLayer)
+          this.renderLayer = undefined
+        }
         this.unRender()
       }
     },
@@ -78,9 +88,9 @@ export default {
     },
     render() {
       const pointLayer = layerByName(this.baseMap, `customPoints-${this.id}`)
-      let poiList = []
       if (!pointLayer) return
-      poiList = pointLayer.getSource().getFeatures()
+      const poiList = pointLayer.getSource().getFeatures()
+      this.renderLayer.getSource().addFeatures(poiList)
       var duration = 3000
       var n = 3
       var flashGeom = new Array(5 * n)

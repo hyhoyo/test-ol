@@ -75,6 +75,9 @@ export default {
       this.getLayer()
       this.drawPoint()
     },
+    getFeature() {
+      return this.getFeatureById(this.id)
+    },
     getFeatureById(id) {
       return this.collectionPointsLayer.getSource().getFeatureById(id)
     },
@@ -100,6 +103,7 @@ export default {
       point.set('extends', this.extends)
       this.setStyle(point)
       this.collectionPointsLayer.getSource().addFeature(point)
+      this.getExtent()
     },
     setStyle(feature) {
       if (feature) {
@@ -113,6 +117,10 @@ export default {
         const feature = this.getFeatureById(this.id)
         this.collectionPointsLayer.getSource().removeFeature(feature)
       }
+    },
+    getExtent() {
+      const extent = this.areaVectorLayer.getSource().getExtent()
+      this.$emit('getExtent', extent)
     }
   },
   beforeDestroy() {

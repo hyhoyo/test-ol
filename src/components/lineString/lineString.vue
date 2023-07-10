@@ -5,26 +5,22 @@
 import { defaultStyleConfig } from '@/assets/config/mapConfig'
 import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
+import { LineString } from 'ol/geom'
 import { Feature } from 'ol'
-import { MultiPolygon } from 'ol/geom'
 export default {
-  name: 'UcenOlMultiPolygon',
+  name: 'UcenOlLineString',
   props: {
     positions: {
       type: Array,
-      default: () => undefined
+      default: () => []
     },
     styles: {
       type: Object,
       default: () => defaultStyleConfig
     },
-    extends: {
+    extend: {
       type: [Array, Number, Object, String],
       default: () => undefined
-    },
-    extent: {
-      type: Boolean,
-      default: () => false
     }
   },
   inject: {
@@ -47,8 +43,8 @@ export default {
   },
   data() {
     return {
-      id: `MultiPolygon-${getUuid()}`,
-      collectionMultiPolygonsLayer: undefined
+      id: `LineString-${getUuid()}`,
+      collectionLineStringLayer: undefined
     }
   },
   watch: {
@@ -75,38 +71,38 @@ export default {
     },
     load() {
       this.getLayer()
-      this.drawMultiPolygon()
+      this.drawLineString()
     },
     getFeature() {
       return this.getFeatureById(this.id)
     },
     getFeatureById(id) {
-      return this.collectionMultiPolygonsLayer.getSource().getFeatureById(id)
+      return this.collectionLineStringLayer.getSource().getFeatureById(id)
     },
     getLayer() {
       if (this.baseVectorLayer) {
-        this.collectionMultiPolygonsLayer = this.baseVectorLayer
+        this.collectionLineStringLayer = this.baseVectorLayer
       } else {
         this.baseMap.getLayers().forEach(item => {
-          if (item.get('name') === 'defaultcollectionMultiPolygonsLayer') {
-            this.collectionMultiPolygonsLayer = item
+          if (item.get('name') === 'defaultcollectionLineStringLayer') {
+            this.collectionLineStringLayer = item
           }
         })
-        if (!this.collectionMultiPolygonsLayer) {
-          this.collectionMultiPolygonsLayer = createVectorLayer()
-          this.collectionMultiPolygonsLayer.set('name', 'defaultcollectionMultiPolygonsLayer')
-          this.baseMap.addLayer(this.collectionMultiPolygonsLayer)
+        if (!this.collectionLineStringLayer) {
+          this.collectionLineStringLayer = createVectorLayer()
+          this.collectionLineStringLayer.set('name', 'defaultcollectionLineStringLayer')
+          this.baseMap.addLayer(this.collectionLineStringLayer)
         }
       }
     },
-    drawMultiPolygon() {
-      const polygon = new Feature({
-        geometry: new MultiPolygon(this.positions).transform('EPSG:4326', 'EPSG:3857')
+    drawLineString() {
+      const lineString = new Feature({
+        geometry: new LineString(this.positions).transform('EPSG:4326', 'EPSG:3857')
       })
-      polygon.setId(this.id)
-      this.setStyle(polygon)
-      polygon.set('extends', this.extends)
-      this.collectionMultiPolygonsLayer.getSource().addFeature(polygon)
+      lineString.setId(this.id)
+      this.setStyle(lineString)
+      lineString.set('extends', this.extends)
+      this.collectionLineStringLayer.getSource().addFeature(lineString)
       this.getExtent()
     },
     setStyle(feature) {
@@ -116,10 +112,10 @@ export default {
         feature.setStyle(style)
       }
     },
-    removeMultiPolygon() {
-      if (this.collectionMultiPolygonsLayer) {
+    removeLineString() {
+      if (this.collectionLineStringLayer) {
         const feature = this.getFeatureById(this.id)
-        this.collectionMultiPolygonsLayer.getSource().removeFeature(feature)
+        this.collectionLineStringLayer.getSource().removeFeature(feature)
       }
     },
     getExtent() {
@@ -128,7 +124,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.removeMultiPolygon()
+    this.removeLineString()
   }
 }
 </script>

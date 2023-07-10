@@ -51,6 +51,18 @@ export default {
       collectionPolygonsLayer: undefined
     }
   },
+  watch: {
+    styles: {
+      handler(newVal) {
+        if (!newVal || Object.keys(newVal).length > 0) {
+          const feature = this.getFeatureById(this.id)
+          if (feature) {
+            this.setStyle(feature)
+          }
+        }
+      }
+    }
+  },
   created() {
     this.init()
   },
@@ -64,6 +76,9 @@ export default {
     load() {
       this.getLayer()
       this.drawPolygon()
+    },
+    getFeature() {
+      return this.getFeatureById(this.id)
     },
     getFeatureById(id) {
       return this.collectionPolygonsLayer.getSource().getFeatureById(id)
@@ -91,6 +106,7 @@ export default {
       console.log(polygon)
       this.setStyle(polygon)
       this.collectionPolygonsLayer.getSource().addFeature(polygon)
+      this.getExtent()
     },
     setStyle(feature) {
       if (feature) {
@@ -104,6 +120,10 @@ export default {
         const feature = this.getFeatureById(this.id)
         this.collectionPolygonsLayer.getSource().removeFeature(feature)
       }
+    },
+    getExtent() {
+      const extent = this.areaVectorLayer.getSource().getExtent()
+      this.$emit('getExtent', extent)
     }
   },
   beforeDestroy() {

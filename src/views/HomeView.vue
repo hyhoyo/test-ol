@@ -5,26 +5,29 @@
     </div>
     <button @click="testClick">切换</button>
     <button @click="testStyle">修改样式</button>
+    <button @click="testMap">切换底图</button>
     <ucen-ol-map :mapConfig="mapConfig" @ready="onReady">
       <!-- <ucen-ol-vector-layer> -->
       <!-- <ucen-ol-scatter :data="scatterData" :styles="scatterStyles"></ucen-ol-scatter> -->
       <!-- </ucen-ol-vector-layer> -->
-      <!-- <ucen-ol-area :data="areaData" :styles="areaStyles" extent @getExtent="getExtent"></ucen-ol-area> -->
-      <!-- <ucen-ol-point :position="[113.7230556, 34.7230556]" :styles="styles"></ucen-ol-point> -->
-      <!-- <ucen-ol-point :position="[110, 32.5]" :styles="styles"></ucen-ol-point> -->
-      <ucen-ol-points v-if="pointsShow" :positions="positions" :styles="styles" :isRender="isRender"></ucen-ol-points>
+      <!-- <ucen-ol-area :data="areaData" :styles="areaStyles" @getExtent="getExtent"></ucen-ol-area> -->
+      <!-- <ucen-ol-point :position="[113.7230556, 34.7230556]" :styles="styles"></ucen-ol-point>
+      <ucen-ol-point :position="[110, 32.5]" :styles="styles"></ucen-ol-point> -->
+      <!-- <ucen-ol-points :positions="positions" :styles="styles"></ucen-ol-points> -->
       <!-- <ucen-ol-polygon :positions="[polygon]"></ucen-ol-polygon> -->
+      <ucen-ol-geojson :geojson="area" :styles="{ fill: '#000' }"></ucen-ol-geojson>
     </ucen-ol-map>
   </div>
 </template>
 
 <script>
-import { UcenOlMap, UcenOlPolygon, UcenOlArea, UcenOlScatter, UcenOlVectorLayer, UcenOlPoints } from '../index'
+import { UcenOlGeojson, UcenOlMap, UcenOlPolygon, UcenOlArea, UcenOlScatter, UcenOlVectorLayer, UcenOlPoints } from '../index'
 
 import { routes } from '@/router'
 import { data, geoCoordMap } from './test.js'
-import { Grid, HexGrid } from '../tools/tools'
+import { Grid, HexGrid, renderXYZ } from '../tools/tools'
 import { fromLonLat, toLonLat } from 'ol/proj'
+import area from './area.json'
 
 export default {
   name: 'HomeView',
@@ -34,7 +37,8 @@ export default {
     UcenOlScatter,
     UcenOlVectorLayer,
     UcenOlPoints,
-    UcenOlPolygon
+    UcenOlPolygon,
+    UcenOlGeojson
   },
   data() {
     return {
@@ -45,58 +49,496 @@ export default {
       mapConfig: { zoom: 6 },
       scatterData: [],
       scatterStyles: {},
-      areaData: {},
+      areaData: {
+        code: '41',
+        features: [
+          {
+            type: 'Feature',
+            properties: {
+              adcode: 410100,
+              name: '郑州市',
+              center: [113.665412, 34.757975],
+              centroid: [113.477391, 34.626256],
+              childrenNum: 12,
+              level: 'city',
+              parent: {
+                adcode: 410000
+              },
+              subFeatureIndex: 0,
+              acroutes: [100000, 410000],
+              code: 410100
+            },
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: [
+                [
+                  [
+                    [114.22071, 34.919066],
+                    [114.208505, 34.926602],
+                    [114.200704, 34.939504],
+                    [114.172834, 34.931871],
+                    [114.160566, 34.933496],
+                    [114.120491, 34.956638],
+                    [114.101869, 34.954768],
+                    [114.080542, 34.944527],
+                    [114.051225, 34.944527],
+                    [114.028451, 34.959346],
+                    [114.018385, 34.958608],
+                    [113.985293, 34.928276],
+                    [113.973654, 34.910447],
+                    [113.953585, 34.898082],
+                    [113.905331, 34.901333],
+                    [113.870163, 34.885666],
+                    [113.826062, 34.877683],
+                    [113.800456, 34.87995],
+                    [113.78649, 34.890445],
+                    [113.777116, 34.905028],
+                    [113.766106, 34.91488],
+                    [113.749057, 34.919017],
+                    [113.725528, 34.917392],
+                    [113.716846, 34.913402],
+                    [113.684824, 34.906358],
+                    [113.670731, 34.910299],
+                    [113.665069, 34.918525],
+                    [113.650348, 34.928769],
+                    [113.631348, 34.929311],
+                    [113.592091, 34.933743],
+                    [113.57479, 34.950583],
+                    [113.552582, 34.965155],
+                    [113.543271, 34.96801],
+                    [113.515086, 34.965992],
+                    [113.495835, 34.959937],
+                    [113.477339, 34.957278],
+                    [113.449658, 34.960232],
+                    [113.429463, 34.964761],
+                    [113.427198, 34.983563],
+                    [113.407821, 34.989518],
+                    [113.37561, 34.98002],
+                    [113.362587, 34.970323],
+                    [113.343462, 34.950533],
+                    [113.333018, 34.944871],
+                    [113.315277, 34.942212],
+                    [113.28986, 34.952601],
+                    [113.260543, 34.953586],
+                    [113.243934, 34.946201],
+                    [113.239342, 34.939504],
+                    [113.236951, 34.925174],
+                    [113.227703, 34.908427],
+                    [113.197631, 34.900299],
+                    [113.179512, 34.893697],
+                    [113.139815, 34.884631],
+                    [113.14793, 34.856096],
+                    [113.119431, 34.853977],
+                    [113.107666, 34.844709],
+                    [113.06023, 34.83756],
+                    [113.039595, 34.841948],
+                    [113.025063, 34.854913],
+                    [113.004364, 34.864081],
+                    [112.992851, 34.863539],
+                    [112.989077, 34.856343],
+                    [112.976117, 34.847765],
+                    [112.943025, 34.831102],
+                    [112.938181, 34.831595],
+                    [112.914148, 34.84747],
+                    [112.902321, 34.852301],
+                    [112.884516, 34.853089],
+                    [112.879106, 34.849688],
+                    [112.873192, 34.832827],
+                    [112.866461, 34.829524],
+                    [112.853501, 34.810736],
+                    [112.838653, 34.812116],
+                    [112.827266, 34.819218],
+                    [112.814118, 34.811475],
+                    [112.80984, 34.7951],
+                    [112.810595, 34.784938],
+                    [112.817263, 34.778278],
+                    [112.837144, 34.782915],
+                    [112.846329, 34.780054],
+                    [112.875017, 34.779659],
+                    [112.887914, 34.782718],
+                    [112.89993, 34.780596],
+                    [112.909367, 34.771123],
+                    [112.908486, 34.757405],
+                    [112.902258, 34.753161],
+                    [112.909933, 34.737465],
+                    [112.939502, 34.72384],
+                    [112.931764, 34.711694],
+                    [112.91635, 34.710953],
+                    [112.901692, 34.693521],
+                    [112.893827, 34.694953],
+                    [112.879735, 34.705077],
+                    [112.867782, 34.708089],
+                    [112.8496, 34.699694],
+                    [112.830223, 34.694163],
+                    [112.829217, 34.683346],
+                    [112.835885, 34.667785],
+                    [112.831041, 34.656669],
+                    [112.847147, 34.640362],
+                    [112.841799, 34.628648],
+                    [112.825001, 34.628698],
+                    [112.82475, 34.625188],
+                    [112.840226, 34.623161],
+                    [112.845574, 34.609913],
+                    [112.839408, 34.596514],
+                    [112.846329, 34.58885],
+                    [112.862183, 34.590284],
+                    [112.864133, 34.580146],
+                    [112.877722, 34.567731],
+                    [112.87898, 34.560015],
+                    [112.890682, 34.547102],
+                    [112.910751, 34.545173],
+                    [112.929562, 34.547548],
+                    [112.952273, 34.547647],
+                    [112.967749, 34.541264],
+                    [112.984736, 34.539038],
+                    [112.976683, 34.53117],
+                    [112.947995, 34.531467],
+                    [112.929813, 34.526023],
+                    [112.925598, 34.509789],
+                    [112.927297, 34.499691],
+                    [112.920125, 34.482016],
+                    [112.922956, 34.47657],
+                    [112.905215, 34.468201],
+                    [112.896155, 34.475827],
+                    [112.862371, 34.473648],
+                    [112.856017, 34.478402],
+                    [112.838024, 34.477164],
+                    [112.806002, 34.479243],
+                    [112.798012, 34.487166],
+                    [112.774609, 34.500137],
+                    [112.767374, 34.49479],
+                    [112.740384, 34.491077],
+                    [112.744285, 34.4683],
+                    [112.741894, 34.433973],
+                    [112.736673, 34.422578],
+                    [112.729626, 34.416978],
+                    [112.735918, 34.404242],
+                    [112.733653, 34.39309],
+                    [112.72409, 34.388877],
+                    [112.721825, 34.380152],
+                    [112.730318, 34.377426],
+                    [112.728117, 34.361163],
+                    [112.732898, 34.350898],
+                    [112.756805, 34.357394],
+                    [112.760076, 34.346584],
+                    [112.776622, 34.345046],
+                    [112.787002, 34.343261],
+                    [112.788953, 34.331158],
+                    [112.81223, 34.340037],
+                    [112.824184, 34.33344],
+                    [112.83318, 34.333638],
+                    [112.854633, 34.316325],
+                    [112.842114, 34.311612],
+                    [112.84117, 34.297818],
+                    [112.856458, 34.302185],
+                    [112.87357, 34.298016],
+                    [112.884516, 34.30144],
+                    [112.91245, 34.293749],
+                    [112.936293, 34.295535],
+                    [112.954097, 34.302135],
+                    [112.960829, 34.297867],
+                    [112.992977, 34.296478],
+                    [113.013235, 34.300398],
+                    [113.020847, 34.290424],
+                    [113.027642, 34.289282],
+                    [113.037142, 34.280299],
+                    [113.059476, 34.280944],
+                    [113.075518, 34.276527],
+                    [113.082439, 34.26645],
+                    [113.097726, 34.26223],
+                    [113.109365, 34.263471],
+                    [113.142583, 34.272804],
+                    [113.15202, 34.266351],
+                    [113.175297, 34.281639],
+                    [113.184356, 34.290225],
+                    [113.18379, 34.295634],
+                    [113.196436, 34.312257],
+                    [113.210276, 34.312009],
+                    [113.223362, 34.325057],
+                    [113.224557, 34.33473],
+                    [113.235567, 34.339045],
+                    [113.267904, 34.337805],
+                    [113.276334, 34.342814],
+                    [113.276586, 34.351444],
+                    [113.314648, 34.352287],
+                    [113.314019, 34.373856],
+                    [113.320436, 34.383375],
+                    [113.315969, 34.391157],
+                    [113.32528, 34.404986],
+                    [113.348809, 34.404738],
+                    [113.353968, 34.396411],
+                    [113.370388, 34.389918],
+                    [113.366991, 34.379805],
+                    [113.389828, 34.375988],
+                    [113.401655, 34.377525],
+                    [113.414867, 34.374947],
+                    [113.406751, 34.355213],
+                    [113.414175, 34.349361],
+                    [113.429085, 34.350303],
+                    [113.459409, 34.334432],
+                    [113.471425, 34.330811],
+                    [113.482875, 34.342864],
+                    [113.498729, 34.338598],
+                    [113.510871, 34.342715],
+                    [113.518169, 34.335771],
+                    [113.516848, 34.328579],
+                    [113.529619, 34.317913],
+                    [113.556608, 34.311513],
+                    [113.566737, 34.318359],
+                    [113.579697, 34.319897],
+                    [113.600836, 34.313299],
+                    [113.608951, 34.3132],
+                    [113.624805, 34.303375],
+                    [113.634494, 34.290026],
+                    [113.643994, 34.288488],
+                    [113.658589, 34.275037],
+                    [113.669851, 34.275385],
+                    [113.679728, 34.282532],
+                    [113.70332, 34.276725],
+                    [113.7003, 34.289381],
+                    [113.71326, 34.29092],
+                    [113.713386, 34.301391],
+                    [113.727227, 34.305757],
+                    [113.736852, 34.317863],
+                    [113.756732, 34.313795],
+                    [113.777242, 34.314589],
+                    [113.793159, 34.328083],
+                    [113.791208, 34.331803],
+                    [113.803791, 34.33721],
+                    [113.832353, 34.32342],
+                    [113.848584, 34.322725],
+                    [113.85022, 34.32719],
+                    [113.880481, 34.32972],
+                    [113.885451, 34.327785],
+                    [113.888093, 34.348369],
+                    [113.879978, 34.356056],
+                    [113.885199, 34.370485],
+                    [113.878531, 34.394577],
+                    [113.878153, 34.411478],
+                    [113.891616, 34.437342],
+                    [113.903507, 34.454185],
+                    [113.912126, 34.452352],
+                    [113.915586, 34.444922],
+                    [113.929993, 34.443485],
+                    [113.938108, 34.454729],
+                    [113.948929, 34.452699],
+                    [113.948615, 34.435063],
+                    [113.968495, 34.439324],
+                    [113.990326, 34.435707],
+                    [114.006557, 34.439225],
+                    [114.019894, 34.445368],
+                    [114.021719, 34.458989],
+                    [114.01851, 34.46721],
+                    [114.008256, 34.470082],
+                    [114.009577, 34.480135],
+                    [114.0226, 34.488552],
+                    [114.035119, 34.503998],
+                    [114.062486, 34.490532],
+                    [114.07035, 34.481472],
+                    [114.083373, 34.480927],
+                    [114.094383, 34.492265],
+                    [114.093942, 34.50182],
+                    [114.100296, 34.535178],
+                    [114.107217, 34.557887],
+                    [114.118478, 34.570155],
+                    [114.129802, 34.575348],
+                    [114.127852, 34.584943],
+                    [114.133451, 34.591025],
+                    [114.136848, 34.605711],
+                    [114.125461, 34.607886],
+                    [114.127726, 34.61718],
+                    [114.14553, 34.61456],
+                    [114.145153, 34.604277],
+                    [114.15459, 34.60576],
+                    [114.15157, 34.618268],
+                    [114.157547, 34.625979],
+                    [114.150375, 34.656669],
+                    [114.160441, 34.665611],
+                    [114.157547, 34.686507],
+                    [114.158113, 34.704336],
+                    [114.141189, 34.7191],
+                    [114.138484, 34.73475],
+                    [114.158364, 34.759379],
+                    [114.172331, 34.768311],
+                    [114.161762, 34.781238],
+                    [114.134143, 34.802154],
+                    [114.122504, 34.81833],
+                    [114.133703, 34.825628],
+                    [114.162517, 34.828883],
+                    [114.185354, 34.825628],
+                    [114.199824, 34.832729],
+                    [114.211085, 34.860877],
+                    [114.220522, 34.906801],
+                    [114.22071, 34.919066]
+                  ]
+                ]
+              ]
+            }
+          }
+        ]
+      },
       areaStyles: {},
       routes,
-      styles: undefined,
+      styles: {},
       positions: [],
-      loaded: false
+      area: area
     }
   },
   created() {
-    this.setAreaData()
+    // this.setAreaData()
+    // this.scatterStyles = {
+    //   circle: {
+    //     fill: '#EB1111',
+    //     radius: 5
+    //   }
+    // }
     this.getHex()
   },
   mounted() {
     this.positions = [
       {
-        position: [104.065735, 30.659462],
+        text: '郑州',
+        type: 'category',
+        position: [113.665412, 34.757975],
         styles: {
-          text: {
-            text: '成都市',
-            fill: '#000000'
-          },
           icon: {
-            anchor: [10, 10],
-            anchorXUnits: 'pixels',
-            anchorYUnits: 'pixels',
+            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAASCAYAAAAdZl26AAAAAXNSR0IArs4c6QAAAf1JREFUSEvtVjtLw2AUPU2jaUkfMam0i0vdXcRBZ/0DOhfFTREnX4goLuJrEBHrqDj7mHXX3d3JqaRtYmy0VLFyL6aEVoUITSv4LckXbr6cc++55yZQTaer+MMr8E+gxdXzXIHH93csFYtYVhT0iCJuy2WsGgb2NA0rhoFL265R2lZVzCsK73dME70dHRiVZdSf8fD2hg3TxKaqIi4InlLimQCdTh+c1HUGd2HbTCYmCJjJ5zEdi2EwFMJcoYAxWeb7tiJwbtsYy+UasrTW1YX711cmQOvQsnCQSNQy2lYVIID1MqC9U4EzIvmZfarWbKGAXlFERBCY5IaqsmTkQAB2tcoV9FVCPxHIRKPIWhZSwSCyiQSoYtcvL0iLIvcA3Q+FQrgplzEejWLLNLGoKDh5evKnB6byeRxZVoOEhsNhzvBCPM66p7iRcJgB05UyTwRoUd9QrJP5vs5O3FUq/hBwkLslQ4Dr9+ROJKVdTeNXHEJt4UIEiABmdB2qIOAsmWxwIUc6JKOv+sVtxb7bKAGa0HUMSRLL4rRUwr6mYblY5P26YWBAkpgYzQoiQzHH3d3sSi2dA5QtstF+SeImdTw+JYq4en6uzQG31IhsJhLhIfaVAfhaAdIyOYozYb/rCee5W0ru2JZKyNOsb3Lwr34lmozJ0/H/BDylqwnBH6rFeMaC+IhMAAAAAElFTkSuQmCC',
             scale: 1,
-            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAAASCAYAAADFavmwAAAAAXNSR0IArs4c6QAAA39JREFUWEftWD0sNVEQPToKCVEpJISoJeiEqBQqf9GgQjSi8pNIEJWfSjSCCo0IKoVK0EgeiShUEhIFjdDRvS/nu+bb2bv37n6bbLm3e+/N3pk5M+fM7CspAkXkJzMESnJAM8Py70U5oNni6QF0bQ3o7ARaW93uCgWgpSU+lOdnYGAAGBwEpqcD2/V1YGYGmJoCxseBkRHg7s5/V3MzcHQE3N8Dvb1uu6sr4PgY2NgAGLv2p5+4vQWWloCdHWB11djrw7wuLkx8vpMQt7tDT07Mdb4EkhxrpwSUxZmYALa2TEJnZ+Z++qmpCRcuDhA7SRbn8hLY3AQmJ4N7k7qORdrbM/ajo0BlpfuJ09MwBsxrdhYYG/P6cgNKwF5fswX04ADo6wPKyvzdza6+vgbKy/2+JXUpKj/rjjw/Bxobgbq6MEifn8DwcBiI7m5TYBabLNGNwsI2NARxuMAU9nx8/GuKKKAOo0j50lKeHfr9HdCSPuxudfWIToK/7+8Du7sBJSVWgkgJIjjv79G7tT/a8FDO4gDV8ZBJTU1Gwgi8+NVF+y1YFFAmQac08NHIRXmtYzoYVpqB82xvG91yBSSay4BpT/C+voIkdGcSPNFifq8BSwKUNGdM/f3A4qKJx0V53wygv58fYG4urMG/MhcFVPRTEnDpqAtQPvf0FBV0GXBC+fb2aGfoTmHn1tdH6amLJAV5eQFqa8P0fnw0spKG8qTsw0MQO8GhPDHWlCcMKBOTCUhwfGL/P5RnIJyqnJr2UKI26QlvU48JrawApaXudOwO4fNpBpNdZG4IOh6bbUnxMMpfxoQBtYeRawrzYVeH2qAIFBK8nvIdHVHBj1uhfN0vPiThtzcjEfPz5hdhl70Gyn20kcEjOfGzvXkkdazCIwDUFl7RJtcO6FubdEEkiJubYAqzYwksVxbRU/pJ2kmTABWZIhBkxOFhMJh4v+5eWZnof2go2DvjhnFqQAmET7dcjmhPcLq6gOrqQKClU5gAK81D6dAvCa6VLOlFIg5QexOQNYj7r45BlnWxp6aTVXyxaGszEsOdlitXRUVYw1NRvlAooqoqOk1t9SIQtFtYAJaXw0BqW3HONYl7H+ktgGowZZJzwmpNTLvY8279dkPwe3rc2svJzUHGPZdH9N3O394yCHjckHJSPuU0y83dCOR/jmTcGTmgOaAZI5DxdX8AtUI+TU01NucAAAAASUVORK5CYII='
+            anchor: [24, -11],
+            anchorXUnits: 'pixels',
+            anchorYUnits: 'pixels'
           }
-          // circle: {
-          //   radius: 20,
-          //   fill: 'green'
-          // }
         }
       },
       {
-        position: [106.504962, 29.533155],
+        text: '濮阳',
+        type: 'category',
+        position: [115.041299, 35.768234],
         styles: {
-          text: {
-            text: '重庆市区',
-            fill: '#000000'
+          icon: {
+            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAASCAYAAAAdZl26AAAAAXNSR0IArs4c6QAAAhhJREFUSEvtVj0sA2EYflotbe96bapVi6VMdgOrMAtzEROJsIiIhFGITRrEYMBg8TOYiFEMJnYWE23Pudz1T9PK+yZf05+pDT2Sfsvlu+/n3ud9nvd5z1aMRIr4x8PWAmAxe3UzcJ/JYP3jA4ehEIe+kEyiu60N84qCmK5jyuvFlqYhKsuQ7XYYhQIm3t5KMI+6unBumrg0zQrovU4njkMhDLpcdaWkbgB0OwVwbBiYUxRcp1JY9PlwlUrhKZdjAGuqij6nE5uBAG7Tadyk09gLBrGUTGLU48GFaWLV70ePw1EKltYmJKk5AMRXtzUNZrGIx1yuJqO0Z1ZRMOJ2M4BJWcaurmMjEMCGplkHYC6R4KAGOjpYGit+P8YliVkRmSZgL/k8Z128jzgcIJkMu91YUVXrAHwWCpiOx0sZPwuHOfB9Xa/RLq3RoHXJZmOJ9Le3V5wXh5paA/RRqoHHbBZDLhczQOM1n2d5kPZ9dju/Ewz8GQlRUEJGz19fLAt6LqtqBQMkMWLgIZtlBggUSUe4lWVFTBISGj41DAYgGCCLpUKNBYM1DBCA+UQCUa/XWhcql8mBrrMLnRgGs1A9xiSJdR99f+clmu90dlrrQtVuIxggYDPxODc1amDkQOU1IObVJtD0IiaLFEELuyQHEpqn5kQgyWIFA3eZTAlQuQQtb2R19fxf2tzQr8QvxdLQtS0ADaXtBw99AzH4Xcap18RmAAAAAElFTkSuQmCC',
+            scale: 1,
+            anchor: [24, -11],
+            anchorXUnits: 'pixels',
+            anchorYUnits: 'pixels'
+          }
+        }
+      },
+      {
+        text: '许昌',
+        type: 'category',
+        position: [111.826063, 34.022956],
+        styles: {
+          icon: {
+            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAASCAYAAAAdZl26AAAAAXNSR0IArs4c6QAAAWhJREFUSEtj/K+k9J9hCAPGUQ8McOyRHAPHf/xguPDrF0MmHx/Y6R///WPIefOGIYuPj8GSgwOrdx7/+cMQ/PIlw+mfP7HKK7OyMiwWFcWpH18YkewBkGGZb94wuHJyMgRxczOAPDTt0yeGKSIiDPxMTDg90PbhA0OHkBBWNSVv3zIEc3PTzwOgEIU5aNanTwxl795hdfhacXGwJwddDMBci558cIUksoexxRLdYgDk4ITXrxk2fP3KkMHHB05Gd3//ZigVEAD7CZ8HBlUeWPf1K8Pu798ZpouIoCQdSkKS3MKMrEwM8wAoBkAhiwsEcHMzTBIWZsh7+xYca/gASO0CUVGcBQEuvRR5gJgYILaYxVdKUb0YhcUAqFhc9uULvE7AloSQ882gioHFX74wPP3zh6FCQABcVOLKxIM2BkBpH1bOw0J2yMRA94cPDKDqHxby5JYg1NBHViamhsXUMmPUA9QKSXLNAQB0jf230BQDdAAAAABJRU5ErkJggg==',
+            scale: 1,
+            anchor: [24, -11],
+            anchorXUnits: 'pixels',
+            anchorYUnits: 'pixels'
+          }
+        }
+      },
+      {
+        text: '郑州1',
+        type: 'category',
+        position: [112.665412, 34.757975],
+        styles: {
+          icon: {
+            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAASCAYAAAAdZl26AAAAAXNSR0IArs4c6QAAAf1JREFUSEvtVjtLw2AUPU2jaUkfMam0i0vdXcRBZ/0DOhfFTREnX4goLuJrEBHrqDj7mHXX3d3JqaRtYmy0VLFyL6aEVoUITSv4LckXbr6cc++55yZQTaer+MMr8E+gxdXzXIHH93csFYtYVhT0iCJuy2WsGgb2NA0rhoFL265R2lZVzCsK73dME70dHRiVZdSf8fD2hg3TxKaqIi4InlLimQCdTh+c1HUGd2HbTCYmCJjJ5zEdi2EwFMJcoYAxWeb7tiJwbtsYy+UasrTW1YX711cmQOvQsnCQSNQy2lYVIID1MqC9U4EzIvmZfarWbKGAXlFERBCY5IaqsmTkQAB2tcoV9FVCPxHIRKPIWhZSwSCyiQSoYtcvL0iLIvcA3Q+FQrgplzEejWLLNLGoKDh5evKnB6byeRxZVoOEhsNhzvBCPM66p7iRcJgB05UyTwRoUd9QrJP5vs5O3FUq/hBwkLslQ4Dr9+ROJKVdTeNXHEJt4UIEiABmdB2qIOAsmWxwIUc6JKOv+sVtxb7bKAGa0HUMSRLL4rRUwr6mYblY5P26YWBAkpgYzQoiQzHH3d3sSi2dA5QtstF+SeImdTw+JYq4en6uzQG31IhsJhLhIfaVAfhaAdIyOYozYb/rCee5W0ru2JZKyNOsb3Lwr34lmozJ0/H/BDylqwnBH6rFeMaC+IhMAAAAAElFTkSuQmCC',
+            scale: 1,
+            anchor: [24, -11],
+            anchorXUnits: 'pixels',
+            anchorYUnits: 'pixels'
+          }
+        }
+      },
+      {
+        text: '濮阳2',
+        type: 'category',
+        position: [113.041299, 35.768234],
+        styles: {
+          icon: {
+            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAASCAYAAAAdZl26AAAAAXNSR0IArs4c6QAAAhhJREFUSEvtVj0sA2EYflotbe96bapVi6VMdgOrMAtzEROJsIiIhFGITRrEYMBg8TOYiFEMJnYWE23Pudz1T9PK+yZf05+pDT2Sfsvlu+/n3ud9nvd5z1aMRIr4x8PWAmAxe3UzcJ/JYP3jA4ehEIe+kEyiu60N84qCmK5jyuvFlqYhKsuQ7XYYhQIm3t5KMI+6unBumrg0zQrovU4njkMhDLpcdaWkbgB0OwVwbBiYUxRcp1JY9PlwlUrhKZdjAGuqij6nE5uBAG7Tadyk09gLBrGUTGLU48GFaWLV70ePw1EKltYmJKk5AMRXtzUNZrGIx1yuJqO0Z1ZRMOJ2M4BJWcaurmMjEMCGplkHYC6R4KAGOjpYGit+P8YliVkRmSZgL/k8Z128jzgcIJkMu91YUVXrAHwWCpiOx0sZPwuHOfB9Xa/RLq3RoHXJZmOJ9Le3V5wXh5paA/RRqoHHbBZDLhczQOM1n2d5kPZ9dju/Ewz8GQlRUEJGz19fLAt6LqtqBQMkMWLgIZtlBggUSUe4lWVFTBISGj41DAYgGCCLpUKNBYM1DBCA+UQCUa/XWhcql8mBrrMLnRgGs1A9xiSJdR99f+clmu90dlrrQtVuIxggYDPxODc1amDkQOU1IObVJtD0IiaLFEELuyQHEpqn5kQgyWIFA3eZTAlQuQQtb2R19fxf2tzQr8QvxdLQtS0ADaXtBw99AzH4Xcap18RmAAAAAElFTkSuQmCC',
+            scale: 1,
+            anchor: [24, -11],
+            anchorXUnits: 'pixels',
+            anchorYUnits: 'pixels'
           }
         }
       }
     ]
+    console.log(this.positions.length)
     this.styles = {
-      circle: {
-        radius: 20,
-        fill: '#008000'
-      }
+      // icon: {
+      //   src: './images/test.jpg',
+      //   scale: 1,
+      //   anchor: [0.5, 0.5]
+      // }
     }
+    // this.positions = [
+    //   {
+    //     value: '867',
+    //     type: 'statMethod',
+    //     position: [113.665412, 34.757975],
+    //     styles: {
+    //       text: {
+    //         text: '867'
+    //       }
+    //     }
+    //   },
+    //   {
+    //     value: '5508',
+    //     type: 'statMethod',
+    //     position: [115.041299, 35.768234],
+    //     styles: {
+    //       text: {
+    //         text: '5508'
+    //       }
+    //     }
+    //   },
+    //   {
+    //     value: '6',
+    //     type: 'statMethod',
+    //     position: [113.826063, 34.022956],
+    //     styles: {
+    //       text: {
+    //         text: '6'
+    //       }
+    //     }
+    //   }
+    // ]
+    // this.styles = {
+    //   text: {
+    //     fill: '#000',
+    //     font: '12px arial常规'
+    //   }
+    // }
   },
   methods: {
+    testMap() {
+      this.mapConfig = {
+        basemap: [
+          {
+            id: 'china',
+            name: 'xyz',
+            visible: false,
+            title: '矢量地图',
+            maxZoom: 9,
+            minZoom: 4,
+            url: 'http://172.39.8.63:8000/services/quanguo/tiles/{z}/{x}/{y}.png'
+          },
+          {
+            id: 'china1',
+            name: 'xyz',
+            title: '卫星地图',
+            visible: true,
+            maxZoom: 9,
+            minZoom: 4,
+            url: 'http://172.39.8.63:8000/services/quanguo/tiles/{z}/{x}/{y}.png?render=tech'
+          }
+        ]
+      }
+    },
     getGrid() {
       const grid = new Grid()
       this.polygon = grid.getGrid(113.7230556, 34.7230556)
@@ -107,31 +549,32 @@ export default {
       const hexGrid = new HexGrid(50000)
       const hexStart = hexGrid.coord2hex([113.7230556, 34.7230556])
       let startPolygon = hexGrid.getHexagon(hexStart)
+      console.log(startPolygon)
       this.polygon = startPolygon
     },
     getExtent(extent) {
-      if (!this.loaded) {
-        this.loaded = true
-        this.map.getView().fit(extent)
-      }
+      this.map.getView().fit(extent)
     },
     onReady(map) {
       this.map = map
-      this.map.on('moveend', e => {
-        const zoom = map.getView().getZoom()
-        let textShow = true
-        if (zoom >= 5) {
-          textShow = false
-          this.areaStyles.text.fill = '#00000000'
-        } else {
-          this.areaStyles.text.fill = this.areaStyles.text.fillClone
+      const xyzConfig = {
+        mapProxyUrl: 'http://172.39.8.63:16501/mapproxy',
+        url: 'http://172.39.8.63:8000/services/quanguo/tiles',
+        param: '',
+        render: 'color',
+        renderopt: {
+          reverse: true,
+          graylevel: [0.63, 0.3, 0.1],
+          coloroffset: [0, 0, 80]
         }
-      })
+      }
+      console.log(map.getLayers())
+      renderXYZ(map, xyzConfig)
     },
     testClick() {
       // this.pointsShow = false
       // this.setAreaData()
-      // this.setScatterData()
+      this.setScatterData()
       this.isRender = false
       // const areaData = {
       //   level: 'province',
@@ -147,41 +590,157 @@ export default {
       // this.pointsShow = false
     },
     testStyle() {
-      this.areaStyles = {
-        text: {
-          font: '20px Calibri,sans-serif',
-          fill: '#fc5531',
-          fillClone: '#fc5531'
-        }
-      }
+      // this.areaStyles = {
+      //   text: {
+      //     font: '20px Calibri,sans-serif',
+      //     fill: '#000000'
+      //   }
+      // }
       this.isRender = !this.isRender
-      this.positions.forEach(item => {
-        item.styles = {
-          icon: {
-            anchor: [0, 0],
-            scale: 1,
-            src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFQAAAASCAYAAADFavmwAAAAAXNSR0IArs4c6QAAA39JREFUWEftWD0sNVEQPToKCVEpJISoJeiEqBQqf9GgQjSi8pNIEJWfSjSCCo0IKoVK0EgeiShUEhIFjdDRvS/nu+bb2bv37n6bbLm3e+/N3pk5M+fM7CspAkXkJzMESnJAM8Py70U5oNni6QF0bQ3o7ARaW93uCgWgpSU+lOdnYGAAGBwEpqcD2/V1YGYGmJoCxseBkRHg7s5/V3MzcHQE3N8Dvb1uu6sr4PgY2NgAGLv2p5+4vQWWloCdHWB11djrw7wuLkx8vpMQt7tDT07Mdb4EkhxrpwSUxZmYALa2TEJnZ+Z++qmpCRcuDhA7SRbn8hLY3AQmJ4N7k7qORdrbM/ajo0BlpfuJ09MwBsxrdhYYG/P6cgNKwF5fswX04ADo6wPKyvzdza6+vgbKy/2+JXUpKj/rjjw/Bxobgbq6MEifn8DwcBiI7m5TYBabLNGNwsI2NARxuMAU9nx8/GuKKKAOo0j50lKeHfr9HdCSPuxudfWIToK/7+8Du7sBJSVWgkgJIjjv79G7tT/a8FDO4gDV8ZBJTU1Gwgi8+NVF+y1YFFAmQac08NHIRXmtYzoYVpqB82xvG91yBSSay4BpT/C+voIkdGcSPNFifq8BSwKUNGdM/f3A4qKJx0V53wygv58fYG4urMG/MhcFVPRTEnDpqAtQPvf0FBV0GXBC+fb2aGfoTmHn1tdH6amLJAV5eQFqa8P0fnw0spKG8qTsw0MQO8GhPDHWlCcMKBOTCUhwfGL/P5RnIJyqnJr2UKI26QlvU48JrawApaXudOwO4fNpBpNdZG4IOh6bbUnxMMpfxoQBtYeRawrzYVeH2qAIFBK8nvIdHVHBj1uhfN0vPiThtzcjEfPz5hdhl70Gyn20kcEjOfGzvXkkdazCIwDUFl7RJtcO6FubdEEkiJubYAqzYwksVxbRU/pJ2kmTABWZIhBkxOFhMJh4v+5eWZnof2go2DvjhnFqQAmET7dcjmhPcLq6gOrqQKClU5gAK81D6dAvCa6VLOlFIg5QexOQNYj7r45BlnWxp6aTVXyxaGszEsOdlitXRUVYw1NRvlAooqoqOk1t9SIQtFtYAJaXw0BqW3HONYl7H+ktgGowZZJzwmpNTLvY8279dkPwe3rc2svJzUHGPZdH9N3O394yCHjckHJSPuU0y83dCOR/jmTcGTmgOaAZI5DxdX8AtUI+TU01NucAAAAASUVORK5CYII='
+      console.log(this.isRender)
+      this.positions = [
+        {
+          value: '867',
+          type: 'statMethod',
+          position: [113.665412, 34.757975],
+          styles: {
+            text: {
+              fill: '#F80D0D',
+              offsetX: 0,
+              offsetY: 0,
+              font: '12px arial常规',
+              text: '6'
+            }
+          }
+        },
+        {
+          text: '410100',
+          type: 'category',
+          position: [113.665412, 34.757975],
+          styles: {
+            icon: {
+              src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAASCAYAAAD4+JjWAAAAAXNSR0IArs4c6QAAAVdJREFUWEftlzFOQzEMhr+egANUXeAMDD0Ae0VnJMQGexEzIxyAFakjKuIUMLCxw1JVneEEyNKLZFlJXvL6lPJEOrr57fizHeuNqL8ogVHlEydQAbV0SAVUENAEWAFPwL2K22Y/Bj6BM+BtR52LFfKZ/aL02UEL4A64bgAdAI/AGNgArwqc+8/ZToEbYA787Kjz+Vxnk2kEfQGaAleNzw/TQWJ+AL6UXc7fAheAXN4BWwLPKpkc3TbRZxarPgDp5E4MCHcZm6h0jJy9jMDwgY3pZExTfBYHpJO3IEKAZBwPOwCK6SRWis+igKSi8rieA9+eUfrXHeRGa+YpyYuCFhoVDTb1DbIF0TqJk+KzaAfZYKkjZoHYxEOdF9OJRrame+hDPgcBSC4pm0ySOQLemxVv17EPeEyX4nOvgLKCD+FwH2t+CHl2vmMFVPBbrHOV/rKwdlBLdX4BbZeYE9DTBH4AAAAASUVORK5CYII=',
+              scale: 1,
+              anchor: [36, 9],
+              anchorXUnits: 'pixels',
+              anchorYUnits: 'pixels'
+            }
+          }
+        },
+        {
+          value: '5508',
+          type: 'statMethod',
+          position: [115.041299, 35.768234],
+          styles: {
+            text: {
+              fill: '#F80D0D',
+              offsetX: 0,
+              offsetY: 0,
+              font: '12px arial常规',
+              text: '6'
+            }
+          }
+        },
+        {
+          text: '410900',
+          type: 'category',
+          position: [115.041299, 35.768234],
+          styles: {
+            icon: {
+              src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAASCAYAAAD4+JjWAAAAAXNSR0IArs4c6QAAAZ5JREFUWEftlr8uhjEUxn/fFbgAsXANBhdgF2aJ2BhsxGwSNhFWiVH8uQhhsNlZRMzEBciT9CQnTdv3U42PpN3enj798+tzTt8RvRUJjDqfMoEOaMAhHdAvApoBLoEL4NCtO9Q/DzwBq8B90C0A58BcImbzpXSlWFU1aemgbeAA2AmApoAzYBp4Be4cOItZ3zKwC6yEUwj0PnAFKCZ4ayGmOVO6j7BeKvZSRQdoBUg3vhk28Rg5SN2nwLPr1/g9YB3Q5g2YXKNmQN5D7Bg4CbGc7q0wp0BXtRaA/OEWIxC2qRiQXKGxG27XNsbSTY4xQHKNwSvpcjGf8t8C1QKQP3wMIgdI6TibAXQbYChVdfNWj/StmpTTaa1cbGKAfH3QbY8LqOQgHUZx1SG1G+ATuA7f/8ZBllpLCc/qUJYiqRoUg/VpGtcLvUxHwBaglyuuTz79crGJ1iDPZ1wHxUBiYLk5SzppDFb8+sndVa1FDaoBJI3/13kIT7x/0cyZ9ttg6+R0pTmr4EjUGlD1Rv6qsAMauJkOqAP6WfJ2Bw3w+wImcpoTTpQBzAAAAABJRU5ErkJggg==',
+              scale: 1,
+              anchor: [36, 9],
+              anchorXUnits: 'pixels',
+              anchorYUnits: 'pixels'
+            }
+          }
+        },
+        {
+          value: '6',
+          type: 'statMethod',
+          position: [113.826063, 34.022956],
+          styles: {
+            text: {
+              fill: '#F80D0D',
+              offsetX: 0,
+              offsetY: 0,
+              font: '12px arial常规',
+              text: '6'
+            }
+          }
+        },
+        {
+          text: '411000',
+          type: 'category',
+          position: [113.826063, 34.022956],
+          styles: {
+            icon: {
+              src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAAASCAYAAAD4+JjWAAAAAXNSR0IArs4c6QAAAVFJREFUWEftlz9KQ0EQxn85gQcINnoGCw9gL6YWxC72BmtLc4C0QkpRPEVS2KXXJoTU8QTywS4M4f3JDkveQ/aV+72Zt/Pbb2Z5A8rTSGBQ+DQTKIBaHFIAHRHQKfAOvAFT8926db3SFnMBfAO3wDLkjDGpmmua5HTQI/ACTAKgE+AVGAIbYGHAHaLF92+AJ2AE/IacqdraRQfIBegSeAibWO05SMsz4KdivUpTrmfgHlBhEeYc2Dq1jy4B2QKuakCkAJJjlGdsiorxajePZls+iVUOB9ni60CkAFKrntUAUnEerTNAOm0N0Dtg19BKKYD+jYNia11XePbTQEudQfvQbQsrlz2QQ7VOZ5Dlk6PFbNEqzALTt3QzamCnaHK368kxg3IDUj7dZIJwDnyFKz5e1V6tF4Bcm+hzUG4H9blW194KoCP+i7lOqO9BxUEtJ/QH8vOVExryOgYAAAAASUVORK5CYII=',
+              scale: 1,
+              anchor: [36, 9],
+              anchorXUnits: 'pixels',
+              anchorYUnits: 'pixels'
+            }
           }
         }
-      })
+      ]
+      // this.styles = {
+      //   icon: {
+      //     src: './images/test.jpg',
+      //     scale: 0.05,
+      //     anchor: [0.5, 0.5]
+      //   }
+      // }
     },
     handleClick(item) {
       this.$router.push({ name: item.name })
     },
     setScatterData() {
-      this.scatterData = data.map(item => {
-        item.position = geoCoordMap[item.name]
-        item.styles = {
-          text: {
-            fill: '#00000',
-            text: '测试文字'
+      // this.scatterData = data.map(item => {
+      //   item.position = geoCoordMap[item.name]
+      //   item.styles = {
+      //     text: {
+      //       fill: '#00000',
+      //       text: '测试文字'
+      //     },
+      //     circle: {
+      //       radius: Math.random() * 10 + 10
+      //     }
+      //   }
+      //   return item
+      // })
+      this.scatterData = [
+        {
+          position: [113.665412, 34.757975],
+          styles: {
+            circle: {
+              radius: 20.02994011976048
+            }
           },
-          circle: {
-            radius: 10
-          }
+          value: '1338',
+          active: true
+        },
+        {
+          position: [115.041299, 35.768234],
+          styles: {
+            circle: {
+              radius: '10'
+            }
+          },
+          value: '8',
+          active: true
+        },
+        {
+          position: [113.826063, 34.022956],
+          styles: {
+            circle: {
+              radius: '10'
+            }
+          },
+          value: '2',
+          active: true
         }
-        return item
-      })
+      ]
     },
     setAreaData() {
       this.areaData = {
@@ -3410,7 +3969,9 @@ export default {
       this.areaStyles = {
         text: {
           font: '12px Calibri,sans-serif',
-          fill: '#315efb'
+          fill: '#315efb',
+          offsetX: 100,
+          offsetY: 100
         }
       }
     }

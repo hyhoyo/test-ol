@@ -61,7 +61,8 @@ styles 为可选-参数与文档保持一致
         stroke: 'red'
       }
     }
-  ]
+  ],
+	extends: any // 扩展数据, 点击查询返回
 }
 ```
 
@@ -72,7 +73,6 @@ styles 为可选-参数与文档保持一致
 	data: {
 		// 选中区域
 		code: 'xxx',
-		level: 'province', // province || regioncity,
 		features: [],
 		styles: {
           fill: 'transparent',
@@ -83,7 +83,13 @@ styles 为可选-参数与文档保持一致
 			{
 				code: 'xx',
 				value: '1000m',
+				features: [],
 				styles: {
+							// font 生效需要指定字体
+							text: {
+								font: '20px Calibri,sans-serif',
+								fill: '#315efb'
+							},
               fill: '#27ff0080',
               stroke: 'red' || {color: 'red', width: 10}
             }
@@ -148,3 +154,35 @@ styles 为可选-参数与文档保持一致
   }
 
 ```
+### 工具
+```
+Grid					格网类
+HexGrid				六边形类
+getArea				获取多边形面积
+getDistance		获取点到点的距离
+getPerimeter	获取多边形周长
+
+### 坐标转换函数
+gcj02Tobd09		
+bd09Togcj02,
+bd09Towgs84,
+wgs84Togcj02,
+wgs84Tobd09,
+gcj02Towgs84 
+
+### 地图方法
+renderXYZ 自定义切片地图加载
+const xyzCongif = {
+		mapProxyUrl: 'http://172.39.8.63:16501/mapproxy',
+		url: 'http://172.39.8.63:8000/services/quanguo/tiles',
+		param: '',
+		render: 'color',
+		renderopt: {
+			reverse: true,
+			graylevel: [0.63, 0.3, 0.1],
+			coloroffset: [0, 0, 80]
+		}
+}
+renderXYZ(map, xyzConfig) // map对象
+```
+

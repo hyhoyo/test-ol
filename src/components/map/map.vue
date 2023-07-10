@@ -93,21 +93,38 @@ export default {
         this.setGeojsonLayers()
         this.setVectorLayers()
         this.$emit('ready', this.map)
-        this.onSelectClick()
+        // this.onSelectClick()
+      } else {
+        const obj = {}
+        this.mapConf.basemap.forEach(item => {
+          obj[item.id] = item.visible || false
+        })
+        this.mapConf.vectormap.forEach(item => {
+          obj[item.id] = item.visible || false
+        })
+        this.mapConf.vectormap.forEach(item => {
+          obj[item.id] = item.visible || false
+        })
+        this.map.getLayers().forEach(item => {
+          const id = item.get('id')
+          const visible = obj[id] === false ? false : true
+          item.setVisible(visible)
+        })
       }
     },
     getLayers() {
       const baseMapConf = this.mapConf.basemap
-      const layers = baseMapConf.map(item => {
+      let layers = baseMapConf.map(item => {
         let layer
         if (item.name === 'xyz') {
           layer = new TileLayer({
             source: new XYZ({
               ...item
             }),
-            visible: item.visible
+            visible: item.visible || false
           })
         }
+        layer.set('id', item.id)
         return layer
       })
       return layers.filter(item => item)

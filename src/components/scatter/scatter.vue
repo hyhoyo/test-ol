@@ -98,7 +98,6 @@ export default {
         this.baseMap.addLayer(this.scatterLayer)
       }
       var poi = []
-
       this.data.forEach((item, index) => {
         // item.position = geoCoordMap[item.name]
         poi.push(new Feature(new Point(fromLonLat(item.position))))
@@ -107,23 +106,28 @@ export default {
         poi[index].set('value', item.value || 0)
         let styles = item.styles || {}
         styles = mergaScatterStyleFn(styles, this.styles)
+        poi[index].set('radius', styles.circle.radius || 10)
         const bdStyle = createStyleFn(styles)
         if (bdStyle) {
           poi[index].setStyle(bdStyle)
         }
       })
       this.scatterLayer.getSource().addFeatures(poi)
-      let poiLiist = poi.filter(item => item.active)
-      if (poiLiist.length === 0) poiLiist = poi
+      if (!this.renderLayer) {
+        this.renderLayer = createVectorLayer()
+        this.renderLayer.setZIndex(99)
+        this.baseMap.addLayer(this.renderLayer)
+      }
+      this.renderLayer.getSource().addFeatures(poi)
       if (this.eventLayer) {
         unByKey(this.eventLayer)
         this.eventLayer = undefined
       }
-      if (poiLiist.length !== 0) {
-        this.render(poiLiist)
+      if (poi.length !== 0) {
+        this.render(poi)
       }
     },
-    render(poiLiist) {
+    render(poiList) {
       var duration = 3000
       var n = 1
       var flashGeom = new Array(5 * n)
@@ -131,9 +135,9 @@ export default {
         this.eventLayer = this.scatterLayer.on('postrender', evt => {
           var vc = getVectorContext(evt)
           var frameState = evt.frameState
-          for (var i = 0, len = poiLiist.length; i < len; i++) {
+          for (var i = 0, len = poiList.length; i < len; i++) {
             for (var j = 0; j < n; j++) {
-              if (flashGeom[j + i * n] == undefined) flashGeom[j + i * n] = poiLiist[i].clone()
+              if (flashGeom[j + i * n] == undefined) flashGeom[j + i * n] = poiList[i].clone()
               if (flashGeom[j + i * n].get('start') == undefined) flashGeom[j + i * n].set('start', new Date().getTime() + (duration / 3) * j)
               var elapsed = frameState.time - flashGeom[j + i * n].get('start')
               if (elapsed >= duration) {
@@ -143,7 +147,7 @@ export default {
               var elapsedRatio = elapsed / duration
               elapsedRatio = elapsedRatio > 0 ? elapsedRatio : 0
               elapsedRatio = elapsedRatio > 1 ? elapsedRatio - 1 : elapsedRatio
-              var radius = linear(elapsedRatio) * (this.styles.circle ? (this.styles.circle.radius || 10) * 2 : 20)
+              var radius = linear(elapsedRatio) * (flashGeom[j + i * n].get('radius') ? (flashGeom[j + i * n].get('radius') || 10) * 2 : 20)
               radius = radius > 0 ? radius : 0
               var opacity = linear(1 - elapsedRatio * 0.8)
               let color = this.styles.circle ? this.styles.circle.fill : '#319FD3'
@@ -182,6 +186,10 @@ export default {
         this.scatterLayer.getSource().clear()
         this.baseMap.removeLayer(this.scatterLayer)
         this.scatterLayer = undefined
+      }
+      if (this.renderLayer) {
+        this.baseMap.removeLayer(this.renderLayer)
+        this.renderLayer = undefined
       }
       if (this.eventLayer) {
         unByKey(this.eventLayer)
