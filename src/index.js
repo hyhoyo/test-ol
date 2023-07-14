@@ -2,6 +2,7 @@ import { Map as UcenOlMap } from './components/map'
 import { Scatter as UcenOlScatter } from './components/scatter'
 import { VectorLayer as UcenOlVectorLayer } from './components/vectorLayer'
 import { Point as UcenOlPoint } from './components/point'
+import { MulitiPoint as UcenOlMultiPoint } from './components/multiPoint'
 import { Points as UcenOlPoints } from './components/points'
 import { Area as UcenOlArea } from './components/area'
 import { Polygon as UcenOlPolygon } from './components/polygon'
@@ -10,4 +11,17 @@ import { LineString as UcenOlLineString } from './components/lineString'
 import { MultiLineString as UcenOlMultiLineString } from './components/multiLineString'
 import { Geojson as UcenOlGeojson } from './components/geojson'
 
-export { UcenOlGeojson, UcenOlLineString, UcenOlMultiLineString, UcenOlMultiPolygon, UcenOlPolygon, UcenOlMap, UcenOlScatter, UcenOlVectorLayer, UcenOlPoint, UcenOlPoints, UcenOlArea }
+export {
+  UcenOlGeojson,
+  UcenOlLineString,
+  UcenOlMultiPoint,
+  UcenOlMultiLineString,
+  UcenOlMultiPolygon,
+  UcenOlPolygon,
+  UcenOlMap,
+  UcenOlScatter,
+  UcenOlVectorLayer,
+  UcenOlPoint,
+  UcenOlPoints,
+  UcenOlArea
+}

@@ -15,17 +15,18 @@
       <ucen-ol-point :position="[110, 32.5]" :styles="styles"></ucen-ol-point> -->
       <!-- <ucen-ol-points :positions="positions" :styles="styles"></ucen-ol-points> -->
       <!-- <ucen-ol-polygon :positions="[polygon]"></ucen-ol-polygon> -->
-      <ucen-ol-geojson :geojson="area" :styles="{ fill: '#000' }"></ucen-ol-geojson>
+      <!-- <ucen-ol-geojson :geojson="area" :styles="{ fill: '#fff' }"></ucen-ol-geojson> -->
+      <UcenOlLineString :positions="lineString" :styles="{ fill: '#000', stroke: '#000' }" />
     </ucen-ol-map>
   </div>
 </template>
 
 <script>
-import { UcenOlGeojson, UcenOlMap, UcenOlPolygon, UcenOlArea, UcenOlScatter, UcenOlVectorLayer, UcenOlPoints } from '../index'
+import { UcenOlLineString, UcenOlGeojson, UcenOlMap, UcenOlPolygon, UcenOlArea, UcenOlScatter, UcenOlVectorLayer, UcenOlPoints } from '../index'
 
 import { routes } from '@/router'
 import { data, geoCoordMap } from './test.js'
-import { Grid, HexGrid, renderXYZ } from '../tools/tools'
+import { bd09Togcj02, bd09Towgs84, gcj02Tobd09, gcj02Towgs84, getPerimeter, Grid, HexGrid, renderXYZ, wgs84Tobd09, wgs84Togcj02 } from '../tools/tools'
 import { fromLonLat, toLonLat } from 'ol/proj'
 import area from './area.json'
 
@@ -38,10 +39,12 @@ export default {
     UcenOlVectorLayer,
     UcenOlPoints,
     UcenOlPolygon,
-    UcenOlGeojson
+    UcenOlGeojson,
+    UcenOlLineString
   },
   data() {
     return {
+      lineString: [],
       polygon: [],
       isRender: true,
       map: undefined,
@@ -392,7 +395,17 @@ export default {
     //     radius: 5
     //   }
     // }
+    // this.getGrid()
     this.getHex()
+    const a = [
+      [108.09876, 37.200787], // 注意：polygon首尾坐标要一致
+      [106.398901, 33.648651],
+      [114.972103, 33.340483],
+      [113.715685, 37.845557],
+      [108.09876, 37.200787]
+    ]
+    const b = getPerimeter(a)
+    console.log('================>>>>', b)
   },
   mounted() {
     this.positions = [
@@ -541,13 +554,14 @@ export default {
     },
     getGrid() {
       const grid = new Grid()
-      this.polygon = grid.getGrid(113.7230556, 34.7230556)
+      this.polygon = grid.grid2coord(-21, 58)
 
       console.log(this.polygon)
     },
     getHex() {
       const hexGrid = new HexGrid(50000)
       const hexStart = hexGrid.coord2hex([113.7230556, 34.7230556])
+      console.log(hexStart)
       let startPolygon = hexGrid.getHexagon(hexStart)
       console.log(startPolygon)
       this.polygon = startPolygon
@@ -569,7 +583,13 @@ export default {
         }
       }
       console.log(map.getLayers())
-      renderXYZ(map, xyzConfig)
+      // renderXYZ(map, xyzConfig)
+      console.log('===>>>gcj02Tobd09', gcj02Tobd09([108.09876, 37.200787]))
+      console.log('===>>>bd09Togcj02', bd09Togcj02([108.09876, 37.200787]))
+      console.log('===>>>bd09Towgs84', bd09Towgs84([108.09876, 37.200787]))
+      console.log('===>>>wgs84Togcj02', wgs84Togcj02([108.09876, 37.200787]))
+      console.log('===>>>wgs84Tobd09', wgs84Tobd09([108.09876, 37.200787]))
+      console.log('===>>>gcj02Towgs84', gcj02Towgs84([108.09876, 37.200787]))
     },
     testClick() {
       // this.pointsShow = false

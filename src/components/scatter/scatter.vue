@@ -13,15 +13,9 @@ import { getVectorContext } from 'ol/render'
 import { getUuid } from '@/utils/index.js'
 import { unByKey } from 'ol/Observable.js'
 import { createStyleFn, createVectorLayer, mergaScatterStyleFn } from '@/utils/olFn.js'
-
+// @group 地图展示组件
 export default {
   name: 'UcenOlScatter',
-  data() {
-    return {
-      scatterLayer: null,
-      uid: getUuid()
-    }
-  },
   props: {
     data: {
       type: Array,
@@ -32,12 +26,12 @@ export default {
       default: () => {
         return {}
       }
-    },
-    range: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+    }
+  },
+  data() {
+    return {
+      scatterLayer: null,
+      uid: getUuid()
     }
   },
   watch: {

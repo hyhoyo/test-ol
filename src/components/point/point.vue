@@ -8,7 +8,8 @@ import { fromLonLat } from 'ol/proj'
 import { Point } from 'ol/geom'
 import { createStyleFn } from '@/utils/olFn'
 import { getUuid } from '@/utils'
-
+// 地图点元素组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlPoint',
   props: {
@@ -120,6 +121,10 @@ export default {
     },
     getExtent() {
       const extent = this.areaVectorLayer.getSource().getExtent()
+      /**
+       * 获取点范围
+       * @arg 地图范围
+       */
       this.$emit('getExtent', extent)
     }
   },

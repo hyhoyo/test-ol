@@ -5,7 +5,8 @@
 </template>
 <script>
 import { createStyleFn, createVectorLayer } from '@/utils/olFn'
-
+// 矢量图层组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlVectorLayer',
   data() {

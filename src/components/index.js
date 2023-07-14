@@ -4,6 +4,7 @@ import VectorLayer from './vectorLayer'
 import Point from './point'
 import Area from './area'
 import Points from './points'
+import MultiPoint from './multiPoint'
 import Polygon from './polygon'
 import MultiPolygon from './multiPolygon'
 import LineString from './lineString'
@@ -27,6 +28,7 @@ export default function install(Vue, options = {}) {
   Vue.use(LineString, options)
   Vue.use(MultiLineString, options)
   Vue.use(Geojson, options)
+  Vue.use(MultiPoint, options)
 }
 
 // export {

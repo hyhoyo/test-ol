@@ -1,6 +1,9 @@
 <template>
   <div class="map-container" :id="id">
-    <slot v-if="map" />
+    <!-- 地图元素插槽 -->
+    <slot v-if="map">
+      <!-- `<ucen-ol-points></ucen-ol-points>` -->
+    </slot>
   </div>
 </template>
 <script>
@@ -18,15 +21,24 @@ import VectorSource from 'ol/source/Vector.js'
 import { mapDefaultConfig } from '../../assets/config/mapConfig.js'
 import { createStyleFn } from '@/utils/olFn.js'
 import Select from 'ol/interaction/Select.js'
+// 基础地图元素组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlMap',
   props: {
+    //唯一标识
     id: {
       type: String,
+      //UUID
       default: () => getUuid()
     },
+    /**
+     * 地图配置对象
+     */
     mapConfig: {
+      // `{"baseMap":{}}`
       type: Object,
+      //{}
       default: () => {
         return {}
       }
@@ -34,6 +46,12 @@ export default {
   },
   data() {
     return {
+      /**
+       * @vuese
+       * 地图对象
+       * @Type object
+       * @Default aadsfadsf
+       */
       map: undefined,
       mapConf: cloneDeep(mapDefaultConfig),
       selectClick: undefined,
@@ -46,6 +64,11 @@ export default {
     }
   },
   watch: {
+    /**
+     * @vuese
+     * 地图配置对象监听
+     * @arg newVal - 新地图配置
+     */
     mapConfig: {
       handler(newVal) {
         if (newVal) {
@@ -72,11 +95,16 @@ export default {
           if (features.length === 1 || features.length === 0) {
             features = features[0]
           }
+          // 地图元素选择事件
           this.$emit('select', features)
         }
         this.selectClick.on('select', this.selectFn)
       }
     },
+    /**
+     *  @vuese
+     * 初始化地图
+     */
     initMap() {
       if (!this.map) {
         const layers = this.getLayers()
@@ -92,6 +120,10 @@ export default {
         })
         this.setGeojsonLayers()
         this.setVectorLayers()
+        /**
+         * 地图加载完成
+         * @arg {map} 地图对象
+         */
         this.$emit('ready', this.map)
         // this.onSelectClick()
       } else {
@@ -112,6 +144,11 @@ export default {
         })
       }
     },
+    /**
+     * @vuese
+     * 获取地图图层列表
+     * @returns {TileLayer<import("../source/Tile.js").default>[]}
+     */
     getLayers() {
       const baseMapConf = this.mapConf.basemap
       let layers = baseMapConf.map(item => {
@@ -180,6 +217,11 @@ export default {
         }
       }
     },
+    /**
+     * @vuese
+     * 设置地图中心点
+     * @arg { center } 中心点坐标
+     */
     setCenter(center) {
       if (this.map) {
         this.map.setCenter(center)

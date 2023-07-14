@@ -140,8 +140,8 @@ const getPerimeter = coordinates => {
       const to = item
       perimeter += getDistance(from, to)
     }
-    return perimeter
   })
+  return perimeter
 }
 
 // 计算距离-公里
@@ -294,7 +294,7 @@ const renderXYZ = (map, xyzConfig) => {
     delete config.mapProxyUrl
   }
   if (config.url) {
-    url += `url=${config.url}/{z}/{x}/{y}.png`
+    url += `url=${config.url}/{z}/{x}/{y}.${config.suffix || 'png'}`
     delete config.url
   }
   if (config.render) {

@@ -7,6 +7,8 @@ import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { MultiPolygon } from 'ol/geom'
+// 地图多面元素组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlMultiPolygon',
   props: {
@@ -123,7 +125,7 @@ export default {
       }
     },
     getExtent() {
-      const extent = this.areaVectorLayer.getSource().getExtent()
+      const extent = this.collectionMultiPolygonsLayer.getSource().getExtent()
       this.$emit('getExtent', extent)
     }
   },

@@ -13,6 +13,8 @@ import { linear } from 'ol/easing'
 import { Stroke, Style, Circle as CircleStyle } from 'ol/style'
 import { hexToRgba } from '@/utils/color'
 import { unByKey } from 'ol/Observable'
+// 地图多点元素组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlPoints',
   components: {
@@ -38,14 +40,17 @@ export default {
     }
   },
   props: {
+    // 点集位置 [[lon, lat],···]
     positions: {
       type: Array,
       default: () => []
     },
+    // 点样式
     styles: {
       type: Object,
       default: () => undefined
     },
+    // isRender
     isRender: {
       type: Boolean,
       default: () => false
@@ -79,6 +84,12 @@ export default {
         this.unRender()
       }
     },
+    /**
+     * @vuese
+     * 设置点集样式
+     * @arg styles
+     * @returns {*}
+     */
     setStyles(styles) {
       let style
       if (styles && Object.keys(styles).length > 0) {

@@ -7,21 +7,51 @@ import { createStyleFn, createVectorLayer, mergaAreaCompareStyleFn } from '@/uti
 import { Feature } from 'ol'
 import { MultiPolygon, Polygon } from 'ol/geom'
 import { defaultStyleConfig } from '@/assets/config/mapConfig'
-
+// 区域对比图组件
+// @group 地图展示组件
 export default {
   name: 'UcenOlArea',
   props: {
     data: {
       type: Object,
+      // {
+      //   label: '00全国',
+      //   id: '00',
+      //   name: '全国',
+      //   features: [
+      //     {
+      //       type: 'Feature',
+      //       properties: {
+      //         id: '65'
+      //       },
+      //       geometry: {
+      //         type: 'Polygon',
+      //         coordinates: [区域数据]
+      //       }
+      //     }
+      //   ]
+      // }
       default: () => undefined
     },
+    /**
+     * @vuese
+     *
+     * @type Object
+     */
     styles: {
       type: Object,
+      // {
+      //   text: {
+      //     font: '12px PingFang SC',
+      //     justify: 'center',
+      //     textAlign: 'center',
+      //     fill: '#000',
+      //     stroke: '#fff'
+      //   },
+      //   fill: '#000',
+      //   stroke: '#fff'
+      // }
       default: () => defaultStyleConfig
-    },
-    extent: {
-      type: Boolean,
-      default: () => false
     }
   },
   inject: ['map'],
@@ -55,7 +85,8 @@ export default {
     return {
       id: `Area-${getUuid()}`,
       areaVectorLayer: undefined,
-      itemVectorLayer: undefined
+      itemVectorLayer: undefined,
+      features: []
     }
   },
   created() {
@@ -72,7 +103,6 @@ export default {
     getLayer() {
       if (!this.areaVectorLayer) {
         this.areaVectorLayer = createVectorLayer()
-        this.areaVectorLayer.set('_id', this.id)
         this.baseMap.addLayer(this.areaVectorLayer)
       }
     },
@@ -97,7 +127,7 @@ export default {
       }
     },
     drawAera(geo, styles) {
-      const features = []
+      this.features = []
       if (styles) {
         const style = createStyleFn(styles)
         this.areaVectorLayer.setStyle(style)
@@ -119,15 +149,25 @@ export default {
           const style = createStyleFn(styles)
           feature.setStyle(style)
         }
-        features.push(feature)
+        this.features.push(feature)
       })
 
-      this.areaVectorLayer.getSource().addFeatures(features)
+      this.areaVectorLayer.getSource().addFeatures(this.features)
       this.getExtent()
     },
     clear() {
-      this.areaVectorLayer.getSource().clear()
+      if (this.areaVectorLayer) {
+        ;(this.features || []).forEach(item => {
+          this.areaVectorLayer.getSource().removeFeature(item)
+        })
+      }
     },
+    /**
+     * @vuese
+     * 获取图层范围
+     * @returns [xmin, ymin, xmax, ymax]
+     */
+    // 获取图层范围
     getExtent() {
       const extent = this.areaVectorLayer.getSource().getExtent()
       this.$emit('getExtent', extent)

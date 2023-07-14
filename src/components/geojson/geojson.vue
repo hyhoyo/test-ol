@@ -6,6 +6,8 @@ import { defaultStyleConfig } from '@/assets/config/mapConfig'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
 import GeoJSON from 'ol/format/GeoJSON.js'
 import { getUuid } from '@/utils'
+// Geojson地图图层组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlGeoJSON',
   props: {
@@ -39,7 +41,8 @@ export default {
   data() {
     return {
       id: `Geojson-${getUuid()}`,
-      collectionGeojsonLayer: undefined
+      collectionGeojsonLayer: undefined,
+      features: []
     }
   },
   watch: {
@@ -85,19 +88,17 @@ export default {
         })
         if (!this.collectionGeojsonLayer) {
           this.collectionGeojsonLayer = createVectorLayer()
-          this.collectionGeojsonLayer.set('id', this.id)
           this.collectionGeojsonLayer.set('name', 'defaultcollectionGeojsonLayer')
           this.baseMap.addLayer(this.collectionGeojsonLayer)
         }
       }
     },
     drawGeojson() {
-      const geojson = new GeoJSON().readFeatures(this.geojson, { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' })
-      console.log(geojson)
-      geojson.forEach(geo => {
+      this.features = new GeoJSON().readFeatures(this.geojson, { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' })
+      this.features.forEach(geo => {
         this.setStyle(geo)
       })
-      this.collectionGeojsonLayer.getSource().addFeatures(geojson)
+      this.collectionGeojsonLayer.getSource().addFeatures(this.features)
       this.getExtent()
     },
     setStyle(feature) {
@@ -109,10 +110,9 @@ export default {
     },
     removeGeojson() {
       if (this.collectionGeojsonLayer) {
-        const id = this.collectionGeojsonLayer.getSource().get('id')
-        if (id === this.id) {
-          this.collectionGeojsonLayer.getSource().clear()
-        }
+        ;(this.features || []).forEach(item => {
+          this.collectionGeojsonLayer.getSource().removeFeature(item)
+        })
       }
     },
     getExtent() {

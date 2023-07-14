@@ -7,6 +7,8 @@ import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
 import { LineString } from 'ol/geom'
 import { Feature } from 'ol'
+// 地图线元素组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlLineString',
   props: {
@@ -119,7 +121,7 @@ export default {
       }
     },
     getExtent() {
-      const extent = this.areaVectorLayer.getSource().getExtent()
+      const extent = this.collectionLineStringLayer.getSource().getExtent()
       this.$emit('getExtent', extent)
     }
   },

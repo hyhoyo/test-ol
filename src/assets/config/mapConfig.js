@@ -53,6 +53,11 @@ const defaultStyleConfig = {
     stroke: '#319FD3',
     fill: 'rgba(255, 255, 255, 0.6)',
     width: 1
+  },
+  lineString: {
+    stroke: '#319FD3',
+    fill: 'rgba(255, 255, 255, 0.6)',
+    width: 1
   }
 }
 

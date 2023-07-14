@@ -4,9 +4,11 @@
 <script>
 import { defaultStyleConfig } from '@/assets/config/mapConfig'
 import { getUuid } from '@/utils'
-import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
+import { createStyleFn, createVectorLayer, mergaLineStringStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { MultiLineString } from 'ol/geom'
+// 地图多线元素组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlMultiLineString',
   props: {
@@ -107,7 +109,7 @@ export default {
     },
     setStyle(feature) {
       if (feature) {
-        const styles = mergaPolygonStyleFn(this.styles)
+        const styles = mergaLineStringStyleFn(this.styles)
         const style = createStyleFn(styles)
         feature.setStyle(style)
       }
@@ -119,7 +121,7 @@ export default {
       }
     },
     getExtent() {
-      const extent = this.areaVectorLayer.getSource().getExtent()
+      const extent = this.collectionMultiLineString.getSource().getExtent()
       this.$emit('getExtent', extent)
     }
   },

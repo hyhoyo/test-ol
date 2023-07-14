@@ -240,6 +240,10 @@ const mergaPolygonStyleFn = (styles, defaultStyle) => {
   return mergaStyleFn(styles || {}, defaultStyle || {}, defaultStyleConfig.polygon || {})
 }
 
+const mergaLineStringStyleFn = (styles, defaultStyle) => {
+  return mergaStyleFn(styles || {}, defaultStyle || {}, defaultStyleConfig.lineString || {})
+}
+
 const mergaStyleFn = (styles, defaultStyle, defaultStyleConfig) => {
   let styleObj = cloneDeep(styles)
   styleObj = recusionStyleFn({}, styles, defaultStyle)
@@ -283,4 +287,17 @@ const layerByName = (map, name) => {
   return layer
 }
 
-export { layerByName, createStyleFn, createVectorLayer, getStyleFn, assignStyleFn, mergaStyleFn, recusionStyleFn, mergaAreaCompareStyleFn, mergaScatterStyleFn, mergaPointStyleFn, mergaPolygonStyleFn }
+export {
+  layerByName,
+  createStyleFn,
+  createVectorLayer,
+  getStyleFn,
+  assignStyleFn,
+  mergaStyleFn,
+  recusionStyleFn,
+  mergaAreaCompareStyleFn,
+  mergaScatterStyleFn,
+  mergaPointStyleFn,
+  mergaPolygonStyleFn,
+  mergaLineStringStyleFn
+}

@@ -7,6 +7,8 @@ import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { Polygon } from 'ol/geom'
+// 地图面元素组件
+// @group 基础地图组件
 export default {
   name: 'UcenOlPolygon',
   props: {
@@ -21,10 +23,6 @@ export default {
     extends: {
       type: [Array, Number, Object, String],
       default: () => undefined
-    },
-    extent: {
-      type: Boolean,
-      default: () => false
     }
   },
   inject: {
