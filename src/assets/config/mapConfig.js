@@ -9,7 +9,7 @@ const mapDefaultConfig = {
       title: '矢量地图',
       maxZoom: 9,
       minZoom: 4,
-      url: 'http://172.39.8.63:8000/services/quanguo/tiles/{z}/{x}/{y}.png'
+      url: 'http://webrd01.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=2&scale=1&style=8'
     }
   ],
   vectormap: [],
