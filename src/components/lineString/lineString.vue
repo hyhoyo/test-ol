@@ -7,6 +7,7 @@ import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
 import { LineString } from 'ol/geom'
 import { Feature } from 'ol'
+import { fromLonLat } from 'ol/proj'
 // 地图线元素组件
 // @group 基础地图组件
 export default {
@@ -56,6 +57,17 @@ export default {
           const feature = this.getFeatureById(this.id)
           if (feature) {
             this.setStyle(feature)
+          }
+        }
+      }
+    },
+    positions: {
+      handler(newVal) {
+        if (newVal) {
+          const feature = this.getFeatureById(this.id)
+          if (feature) {
+            const data = newVal.map(item => fromLonLat(item))
+            feature.getGeometry().setCoordinates(data)
           }
         }
       }

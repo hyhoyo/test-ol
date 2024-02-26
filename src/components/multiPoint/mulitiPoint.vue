@@ -7,6 +7,7 @@ import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPointStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { MultiPoint } from 'ol/geom'
+import { fromLonLat } from 'ol/proj'
 // 地图多线元素组件
 // @group 基础地图组件
 export default {
@@ -59,6 +60,18 @@ export default {
           }
         }
       }
+    },
+    positions: {
+      handler(newVal) {
+        if (newVal) {
+          const feature = this.getFeatureById(this.id)
+          if (feature) {
+            const data = newVal.map(item => fromLonLat(item))
+            feature.getGeometry().setCoordinates(data)
+            this.setStyle(feature)
+          }
+        }
+      }
     }
   },
   created() {
@@ -97,14 +110,15 @@ export default {
         }
       }
     },
-    drawMultiPolygon() {
-      const polygon = new Feature({
+    drawMultiPoint() {
+      const points = new Feature({
         geometry: new MultiPoint(this.positions).transform('EPSG:4326', 'EPSG:3857')
       })
-      polygon.setId(this.id)
-      this.setStyle(polygon)
-      polygon.set('extends', this.extends)
-      this.collectionMultiPoint.getSource().addFeature(polygon)
+      console.log()
+      points.setId(this.id)
+      this.setStyle(points)
+      points.set('extends', this.extends)
+      this.collectionMultiPoint.getSource().addFeature(points)
       this.getExtent()
     },
     setStyle(feature) {
@@ -114,7 +128,7 @@ export default {
         feature.setStyle(style)
       }
     },
-    removeMultiPolygon() {
+    removeMultiPoint() {
       if (this.collectionMultiPoint) {
         const feature = this.getFeatureById(this.id)
         this.collectionMultiPoint.getSource().removeFeature(feature)
@@ -126,7 +140,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.removeMultiPolygon()
+    this.removeMultiPoint()
   }
 }
 </script>

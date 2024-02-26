@@ -7,6 +7,7 @@ import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaPolygonStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { Polygon } from 'ol/geom'
+import { fromLonLat } from 'ol/proj'
 // 地图面元素组件
 // @group 基础地图组件
 export default {
@@ -59,9 +60,23 @@ export default {
           }
         }
       }
+    },
+    positions: {
+      handler(newVal) {
+        console.log(this.positions)
+        if (newVal) {
+          const feature = this.getFeatureById(this.id)
+          if (feature) {
+            const data = newVal[0].map(item => fromLonLat(item))
+            feature.getGeometry().setCoordinates([data])
+            this.setStyle(feature)
+          }
+        }
+      }
     }
   },
   created() {
+    console.log(this.positions)
     this.init()
   },
   methods: {
@@ -101,7 +116,6 @@ export default {
       const polygon = new Feature(new Polygon(this.positions).transform('EPSG:4326', 'EPSG:3857'))
       polygon.setId(this.id)
       polygon.set('extends', this.extends)
-      console.log(polygon)
       this.setStyle(polygon)
       this.collectionPolygonsLayer.getSource().addFeature(polygon)
       this.getExtent()
@@ -120,7 +134,7 @@ export default {
       }
     },
     getExtent() {
-      const extent = this.areaVectorLayer.getSource().getExtent()
+      const extent = this.collectionPolygonsLayer.getSource().getExtent()
       this.$emit('getExtent', extent)
     }
   },

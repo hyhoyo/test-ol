@@ -46,6 +46,17 @@ export default {
           }
         }
       }
+    },
+    position: {
+      handler(newVal) {
+        if (newVal) {
+          const feature = this.getFeatureById(this.id)
+          if (feature) {
+            feature.getGeometry().setCoordinates(fromLonLat(newVal))
+            this.setStyle(feature)
+          }
+        }
+      }
     }
   },
   computed: {
@@ -120,7 +131,7 @@ export default {
       }
     },
     getExtent() {
-      const extent = this.areaVectorLayer.getSource().getExtent()
+      const extent = this.collectionPointsLayer.getSource().getExtent()
       /**
        * 获取点范围
        * @arg 地图范围

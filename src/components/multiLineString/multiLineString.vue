@@ -7,6 +7,7 @@ import { getUuid } from '@/utils'
 import { createStyleFn, createVectorLayer, mergaLineStringStyleFn } from '@/utils/olFn'
 import { Feature } from 'ol'
 import { MultiLineString } from 'ol/geom'
+import { fromLonLat } from 'ol/proj'
 // 地图多线元素组件
 // @group 基础地图组件
 export default {
@@ -59,6 +60,20 @@ export default {
           }
         }
       }
+    },
+    positions: {
+      handler(newVal) {
+        if (newVal) {
+          const feature = this.getFeatureById(this.id)
+          if (feature) {
+            const data = newVal.map(item => {
+              item = item.map(m => fromLonLat(m))
+              return item
+            })
+            feature.getGeometry().setCoordinates(data)
+          }
+        }
+      }
     }
   },
   created() {
@@ -97,7 +112,7 @@ export default {
         }
       }
     },
-    drawMultiPolygon() {
+    drawMultiLineString() {
       const polygon = new Feature({
         geometry: new MultiLineString(this.positions).transform('EPSG:4326', 'EPSG:3857')
       })
