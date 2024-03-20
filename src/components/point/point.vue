@@ -15,7 +15,7 @@ export default {
   props: {
     position: {
       type: Array,
-      default: () => [0, 0]
+      default: () => undefined
     },
     extends: {
       type: [Array, Number, Object, String],
@@ -49,12 +49,16 @@ export default {
     },
     position: {
       handler(newVal) {
-        if (newVal) {
+        if (newVal && newVal.length > 0) {
           const feature = this.getFeatureById(this.id)
           if (feature) {
             feature.getGeometry().setCoordinates(fromLonLat(newVal))
             this.setStyle(feature)
+          } else {
+            this.load()
           }
+        } else {
+          this.removePoint()
         }
       }
     }

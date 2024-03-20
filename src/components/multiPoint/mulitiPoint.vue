@@ -69,7 +69,11 @@ export default {
             const data = newVal.map(item => fromLonLat(item))
             feature.getGeometry().setCoordinates(data)
             this.setStyle(feature)
+          } else {
+            this.load()
           }
+        } else {
+          this.removeMultiPoint()
         }
       }
     }

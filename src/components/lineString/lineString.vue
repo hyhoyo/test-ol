@@ -15,7 +15,7 @@ export default {
   props: {
     positions: {
       type: Array,
-      default: () => []
+      default: () => undefined
     },
     styles: {
       type: Object,
@@ -68,7 +68,11 @@ export default {
           if (feature) {
             const data = newVal.map(item => fromLonLat(item))
             feature.getGeometry().setCoordinates(data)
+          } else {
+            this.load()
           }
+        } else {
+          this.removeLineString()
         }
       }
     }

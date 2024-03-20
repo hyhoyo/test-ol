@@ -63,20 +63,22 @@ export default {
     },
     positions: {
       handler(newVal) {
-        console.log(this.positions)
-        if (newVal) {
+        if (newVal && newVal.length > 0) {
           const feature = this.getFeatureById(this.id)
           if (feature) {
             const data = newVal[0].map(item => fromLonLat(item))
             feature.getGeometry().setCoordinates([data])
             this.setStyle(feature)
+          } else {
+            this.load()
           }
+        } else {
+          this.removePolygon()
         }
       }
     }
   },
   created() {
-    console.log(this.positions)
     this.init()
   },
   methods: {

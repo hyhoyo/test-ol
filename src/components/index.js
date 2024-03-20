@@ -7,6 +7,7 @@ import Points from './points'
 import MultiPoint from './multiPoint'
 import Polygon from './polygon'
 import MultiPolygon from './multiPolygon'
+import Overlay from './overlay'
 import LineString from './lineString'
 import MultiLineString from './multiLineString'
 import Geojson from './geojson'
@@ -29,6 +30,7 @@ export default function install(Vue, options = {}) {
   Vue.use(MultiLineString, options)
   Vue.use(Geojson, options)
   Vue.use(MultiPoint, options)
+  Vue.use(Overlay, options)
 }
 
 // export {

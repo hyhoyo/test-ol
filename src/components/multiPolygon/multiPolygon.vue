@@ -76,7 +76,11 @@ export default {
             })
             feature.getGeometry().setCoordinates(data)
             this.setStyle(feature)
+          } else {
+            this.load()
           }
+        } else {
+          this.removeMultiPolygon()
         }
       }
     }

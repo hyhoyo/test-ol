@@ -71,7 +71,11 @@ export default {
               return item
             })
             feature.getGeometry().setCoordinates(data)
+          } else {
+            this.load()
           }
+        } else {
+          this.removeMultiPolygon()
         }
       }
     }

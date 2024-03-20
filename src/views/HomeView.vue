@@ -6,23 +6,44 @@
     <button @click="testClick">切换</button>
     <button @click="testStyle">修改样式</button>
     <button @click="testMap">切换底图</button>
+    <button @click="changeMap">更新数据</button>
+    <button @click="removeOverlay">删除遮罩</button>
+    <button @click="removeEvents">删除事件</button>
     <ucen-ol-map :mapConfig="mapConfig" @ready="onReady">
       <!-- <ucen-ol-vector-layer> -->
       <!-- <ucen-ol-scatter :data="scatterData" :styles="scatterStyles"></ucen-ol-scatter> -->
       <!-- </ucen-ol-vector-layer> -->
       <!-- <ucen-ol-area :data="areaData" :styles="areaStyles" @getExtent="getExtent"></ucen-ol-area> -->
-      <!-- <ucen-ol-point :position="[113.7230556, 34.7230556]" :styles="styles"></ucen-ol-point>
-      <ucen-ol-point :position="[110, 32.5]" :styles="styles"></ucen-ol-point> -->
+      <!-- <ucen-ol-point :position="[113.7230556, 34.7230556]" :styles="styles"></ucen-ol-point> -->
+      <!-- <ucen-ol-point :position="[110, 32.5]" :styles="styles"></ucen-ol-point> -->
       <!-- <ucen-ol-points :positions="positions" :styles="styles"></ucen-ol-points> -->
       <!-- <ucen-ol-polygon :positions="[polygon]"></ucen-ol-polygon> -->
       <!-- <ucen-ol-geojson :geojson="area" :styles="{ fill: '#fff' }"></ucen-ol-geojson> -->
-      <UcenOlLineString :positions="lineString" :styles="{ fill: '#000', stroke: '#000' }" />
+      <!-- <UcenOlMultiPolygon :positions="multiPositions" :styles="{ stroke: '#c00' }" /> -->
+      <!-- <UcenOlMultiPoint :positions="multiPoint" :styles="{ circle: { stroke: '#c00' } }" /> -->
+      <!-- <UcenOlMultiLineString :positions="multiLineString" :styles="{ stroke: '#c00' }" /> -->
+      <!-- <UcenOlLineString :positions="lineString" :styles="{ fill: '#000', stroke: '#000' }" /> -->
+      <UcenOlOverlay v-if="pointPosition" :dom="dom" :options="{ positioning: 'center-center' }" :position="pointPosition" />
     </ucen-ol-map>
   </div>
 </template>
 
 <script>
-import { UcenOlLineString, UcenOlGeojson, UcenOlMap, UcenOlPolygon, UcenOlArea, UcenOlScatter, UcenOlVectorLayer, UcenOlPoints } from '../index'
+import {
+  UcenOlLineString,
+  UcenOlMultiLineString,
+  UcenOlMultiPoint,
+  UcenOlMultiPolygon,
+  UcenOlGeojson,
+  UcenOlMap,
+  UcenOlPolygon,
+  UcenOlArea,
+  UcenOlScatter,
+  UcenOlVectorLayer,
+  UcenOlPoints,
+  UcenOlPoint,
+  UcenOlOverlay
+} from '../index'
 
 import { routes } from '@/router'
 import { data, geoCoordMap } from './test.js'
@@ -38,13 +59,24 @@ export default {
     UcenOlScatter,
     UcenOlVectorLayer,
     UcenOlPoints,
+    UcenOlPoint,
     UcenOlPolygon,
     UcenOlGeojson,
-    UcenOlLineString
+    UcenOlLineString,
+    UcenOlMultiPolygon,
+    UcenOlMultiPoint,
+    UcenOlMultiLineString,
+    UcenOlOverlay
   },
   data() {
     return {
-      lineString: [],
+      pointPosition: [110, 32.5],
+      lineString: [
+        [114.36068692833514, 34.89779093037984],
+        [113.97170500000747, 35.081777938067205],
+        [113.58272307167981, 34.89779093037984],
+        [113.58272307167981, 34.52857875378659]
+      ],
       polygon: [],
       isRender: true,
       map: undefined,
@@ -384,7 +416,59 @@ export default {
       routes,
       styles: {},
       positions: [],
-      area: area
+      area: area,
+      multiPoint: [
+        [114.36068692833514, 34.89779093037984],
+        [113.97170500000747, 35.081777938067205],
+        [113.58272307167981, 34.89779093037984],
+        [113.58272307167981, 34.52857875378659],
+        [113.97170500000747, 34.34335557822773],
+        [114.36068692833514, 34.52857875378659],
+        [114.36068692833514, 34.89779093037984],
+        [113.97170500000747, 35.081777938067205]
+      ],
+      multiLineString: [
+        [
+          [114.36068692833514, 34.89779093037984],
+          [113.97170500000747, 35.081777938067205],
+          [113.58272307167981, 34.89779093037984],
+          [113.58272307167981, 34.52857875378659]
+        ],
+        [
+          [116.69457849830118, 33.78523007002315],
+          [112.80475921502448, 35.63125108320182],
+          [108.91493993174777, 33.78523007002315],
+          [108.91493993174777, 29.972379658691793]
+        ]
+      ],
+      multiPositions: [
+        [
+          [
+            [114.36068692833514, 34.89779093037984],
+            [113.97170500000747, 35.081777938067205],
+            [113.58272307167981, 34.89779093037984],
+            [113.58272307167981, 34.52857875378659],
+            [113.97170500000747, 34.34335557822773],
+            [114.36068692833514, 34.52857875378659],
+            [114.36068692833514, 34.89779093037984],
+            [113.97170500000747, 35.081777938067205]
+          ]
+        ],
+        [
+          [
+            [116.69457849830118, 33.78523007002315],
+            [112.80475921502448, 35.63125108320182],
+            [108.91493993174777, 33.78523007002315],
+            [108.91493993174777, 29.972379658691793],
+            [112.80475921502448, 28.008139237143098],
+            [116.69457849830118, 29.972379658691793],
+            [116.69457849830118, 33.78523007002315],
+            [112.80475921502448, 35.63125108320182]
+          ]
+        ]
+      ],
+      dom: undefined,
+      domList: []
     }
   },
   created() {
@@ -405,7 +489,7 @@ export default {
       [108.09876, 37.200787]
     ]
     const b = getPerimeter(a)
-    console.log('================>>>>', b)
+    this.getDom()
   },
   mounted() {
     this.positions = [
@@ -528,6 +612,70 @@ export default {
     // }
   },
   methods: {
+    getDom() {
+      const dom = document.createElement('div')
+      dom.setAttribute('class', 'overlay-gif')
+      dom.addEventListener('mouseenter', this.mouseEnter)
+      dom.addEventListener('mouseleave', this.mouseLeave)
+      dom.innerHTML = `================`
+      this.dom = dom
+      this.domList.push(dom)
+    },
+    // 销毁overlay
+    removeOverlay() {
+      this.pointPosition = []
+    },
+    mouseEnter(e) {
+      console.log('===========>>>e移入', e)
+    },
+    mouseLeave(e) {
+      console.log('===========>>>e移出', e)
+    },
+    changeMap() {
+      this.pointPosition = [112.36068692833514, 34.89779093037984]
+      // const hexGrid = new HexGrid(500000)
+      // const hexStart = hexGrid.coord2hex([113.7230556, 34.7230556])
+      // let startPolygon = hexGrid.getHexagon(hexStart)
+      // this.polygon = startPolygon
+      // this.multiPositions = [
+      //   [
+      //     [
+      //       [114.36068692833514, 34.89779093037984],
+      //       [113.97170500000747, 35.081777938067205],
+      //       [113.58272307167981, 34.89779093037984],
+      //       [113.58272307167981, 34.52857875378659],
+      //       [113.97170500000747, 34.34335557822773],
+      //       [114.36068692833514, 34.52857875378659],
+      //       [114.36068692833514, 34.89779093037984],
+      //       [113.97170500000747, 35.081777938067205]
+      //     ]
+      //   ]
+      // ]
+      // this.multiPoint = [
+      //   [114.36068692833514, 34.89779093037984],
+      //   [113.97170500000747, 35.081777938067205]
+      // ]
+      this.multiLineString = [
+        [
+          [113.97170500000747, 34.34335557822773],
+          [114.36068692833514, 34.52857875378659],
+          [114.36068692833514, 34.89779093037984],
+          [113.97170500000747, 35.081777938067205]
+        ],
+        [
+          [112.80475921502448, 28.008139237143098],
+          [116.69457849830118, 29.972379658691793],
+          [116.69457849830118, 33.78523007002315],
+          [112.80475921502448, 35.63125108320182]
+        ]
+      ]
+      this.lineString = [
+        [113.97170500000747, 34.34335557822773],
+        [114.36068692833514, 34.52857875378659],
+        [114.36068692833514, 34.89779093037984],
+        [113.97170500000747, 35.081777938067205]
+      ]
+    },
     testMap() {
       this.mapConfig = {
         basemap: [
@@ -563,7 +711,6 @@ export default {
       const hexStart = hexGrid.coord2hex([113.7230556, 34.7230556])
       console.log(hexStart)
       let startPolygon = hexGrid.getHexagon(hexStart)
-      console.log(startPolygon)
       this.polygon = startPolygon
     },
     getExtent(extent) {
@@ -716,19 +863,6 @@ export default {
       this.$router.push({ name: item.name })
     },
     setScatterData() {
-      // this.scatterData = data.map(item => {
-      //   item.position = geoCoordMap[item.name]
-      //   item.styles = {
-      //     text: {
-      //       fill: '#00000',
-      //       text: '测试文字'
-      //     },
-      //     circle: {
-      //       radius: Math.random() * 10 + 10
-      //     }
-      //   }
-      //   return item
-      // })
       this.scatterData = [
         {
           position: [113.665412, 34.757975],
@@ -3994,7 +4128,24 @@ export default {
           offsetY: 100
         }
       }
+    },
+    removeEvents() {
+      this.pointPosition = undefined
+      // if (this.domList) {
+      //   this.domList = this.domList.map(item => {
+      //     if (item) {
+      //       item.removeEventListener('mouseenter', this.mouseEnter)
+      //       item.removeEventListener('mouseleave', this.mouseLeave)
+      //       item.remove()
+      //     }
+      //     return item
+      //   })
+      //   this.domList = []
+      // }
     }
+  },
+  beforeDestroy() {
+    this.removeEvents()
   }
 }
 </script>
