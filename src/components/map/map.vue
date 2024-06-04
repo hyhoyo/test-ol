@@ -55,7 +55,9 @@ export default {
       map: undefined,
       mapConf: cloneDeep(mapDefaultConfig),
       selectClick: undefined,
-      selectFn: undefined
+      selectFn: undefined,
+      minZoom: undefined,
+      maxZoom: undefined
     }
   },
   provide: function () {
@@ -108,18 +110,21 @@ export default {
     initMap() {
       if (!this.map) {
         const layers = this.getLayers()
+        console.log
         this.map = new Map({
           target: this.id,
           layers: layers,
           view: new View({
             center: fromLonLat(this.mapConf.center),
-            zoom: this.mapConf.zoom,
-            maxZoom: this.mapConf.maxZoom,
-            minZoom: this.mapConf.minZoom
+            zoom: this.mapConf.zoom
           })
         })
         this.setGeojsonLayers()
         this.setVectorLayers()
+        this.map.getView().setCenter(fromLonLat(this.mapConf.center))
+        this.map.getView().setZoom(this.mapConf.zoom)
+        this.map.getView().setMinZoom(this.minZoom || 0)
+        this.map.getView().setMaxZoom(this.maxZoom || 28)
         /**
          * 地图加载完成
          * @arg {map} 地图对象
@@ -129,9 +134,6 @@ export default {
       } else {
         const obj = {}
         this.mapConf.basemap.forEach(item => {
-          obj[item.id] = item.visible || false
-        })
-        this.mapConf.vectormap.forEach(item => {
           obj[item.id] = item.visible || false
         })
         this.mapConf.vectormap.forEach(item => {
@@ -151,14 +153,19 @@ export default {
      */
     getLayers() {
       const baseMapConf = this.mapConf.basemap
-      let layers = baseMapConf.map(item => {
+      let layers = baseMapConf.map((item, index) => {
+        if (this.minZoom > item.minZoom) this.minZoom = item.minZoom
+        if (this.maxZoom < item.maxZoom) this.maxZoom = item.maxZoom
+        delete item.minZoom
+        delete item.maxZoom
         let layer
         if (item.name === 'xyz') {
           layer = new TileLayer({
             source: new XYZ({
               ...item
             }),
-            visible: item.visible || false
+            visible: item.visible || false,
+            zIndex: index
           })
         }
         layer.set('id', item.id)
@@ -169,17 +176,22 @@ export default {
     setVectorLayers() {
       const vectorMapConf = this.mapConf.vectormap
       if (vectorMapConf && this.map) {
-        for (let item of vectorMapConf) {
+        for (let [index, item] of vectorMapConf) {
           if (!item.source) {
             continue
           }
+          if (this.minZoom > item.minZoom) this.minZoom = item.minZoom
+          if (this.maxZoom < item.maxZoom) this.maxZoom = item.maxZoom
+          delete item.minZoom
+          delete item.maxZoom
           const source = cloneDeep(item.source)
           delete item.source
           const layer = new VectorTileLayer({
             ...item,
             source: new VectorTile({
               ...source
-            })
+            }),
+            index: index + this.mapConf.basemap.length
           })
           layer.set('_id', item.id)
           if (item.styles) {
